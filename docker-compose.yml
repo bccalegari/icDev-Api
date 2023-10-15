@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+
+  app:
+    build: ./api
+    image: node:18-alpine
+    container_name: icdev_app
+    command: npm run dev
+    working_dir: /api
+    restart: on-failure
+    env_file: ./.env
+    expose: [$APP_DOCKER_PORT]
+    environment:
+      - PORT=$APP_DOCKER_PORT
+      - DB_HOST=db
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_ROOT_PASSWORD
+      - DB_NAME=$DB_DATABASE
+      - DB_PORT=$DB_DOCKER_PORT
+    networks:
+      icDev_network:
+        aliases:
+            - app
+    volumes:
+      - ./api:/api:cached
+    depends_on:
+      db:
+        condition: service_started
+
+  db:
+    image: mysql:8.0
+    container_name: icdev_db
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$DB_DATABASE
+    networks:
+      icDev_network:
+        aliases:
+            - db
+    volumes:
+      - database:/var/lib/mysql
+
+  proxy:
+    build: ./nginx
+    image: nginx:stable
+    container_name: icdev_proxy
+    hostname: nginx
+    ports:
+      - "8080:80" 
+    networks:
+      icDev_network:
+        aliases:
+            - proxy
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+networks:
+  icDev_network:
+    name: icDev_network
+    driver: bridge
+
+volumes: 
+  database:
+    name: icDev_database
