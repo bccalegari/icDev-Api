@@ -10,14 +10,15 @@ services:
     working_dir: /api
     restart: on-failure
     env_file: ./.env
-    expose: [$APP_DOCKER_PORT]
+    expose: [8000]
     environment:
-      - PORT=$APP_DOCKER_PORT
+      - APP_ENV=$APP_ENV
+      - PORT=8000
       - DB_HOST=db
       - DB_USER=$DB_USER
       - DB_PASSWORD=$DB_ROOT_PASSWORD
-      - DB_NAME=$DB_DATABASE
-      - DB_PORT=$DB_DOCKER_PORT
+      - DB_NAME=icDev
+      - DB_PORT=3306
     networks:
       icDev_network:
         aliases:
@@ -32,15 +33,22 @@ services:
     image: mysql:8.0
     container_name: icdev_db
     env_file: ./.env
+    expose: [3306]
     environment:
       - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$DB_DATABASE
+      - MYSQL_DATABASE=icDev
+      - MYSQL_PORT=3306
+    ports:
+      - "$DB_LOCAL_PORT:3306" 
     networks:
       icDev_network:
         aliases:
             - db
     volumes:
       - database:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/my.cnf:/etc/my.cnf
+      - ./db/:/var/lib/mysql-files
 
   proxy:
     build: ./nginx
@@ -55,6 +63,9 @@ services:
             - proxy
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      app:
+        condition: service_started
 
 networks:
   icDev_network:
