@@ -327,7 +327,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: true,
 			validate: {
 				isDate: {
-					msg: 'updatedAt must be a date'
+					msg: 'deletedAt must be a date'
 				}
 			}
 		},
