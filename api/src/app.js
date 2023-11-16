@@ -18,14 +18,33 @@ const test = async () => {
 
 test();
 
+/*
+db.user.create({'name': 'bruno', 'lastName': 'calegari', 'cpf': '11111111111', 'street': 'rua arutana', 
+	'streetNumber': 6, 'district': 'pq dom pedro ii', 'birthDate': '2000-10-29', 'phone': '19995109554',
+	'email': 'brunocostacallegari@gmail.com', 'idCity': 1, 'createdBy': 1, 'idCompany': 1}, {
+	'user': 1
+});
+*/
+
+/*
+db.user.findByPk(6).then((user) => user.update({'name': 'change'}, {
+	'user': 1}));
+*/
+
+/*
+db.user.findByPk(6).then((user) => user.destroy({
+	'user': 1
+}));
+*/
+
+/*
 const teste = async () => {
-	const company = await db.city.findByPk(1, {
-		include: db.state
-	});
+	const company = await db.user.findByPk(1);
 	console.log(company);
 };
 
 teste();
+*/
 
 //db.apiKey.create({'key': 'dsasdsasdsasdsws'});
 
