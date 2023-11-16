@@ -24,11 +24,11 @@ CREATE TABLE IF NOT EXISTS apiKey (
 CREATE TABLE IF NOT EXISTS company (
   idCompany INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  apiKey INT NOT NULL,
+  idApiKey INT NOT NULL,
   CONSTRAINT company_idCompany_PK PRIMARY KEY (idCompany),
-  CONSTRAINT company_apiKey_UNIQUE UNIQUE (apiKey),
+  CONSTRAINT company_apiKey_UNIQUE UNIQUE (idApiKey),
   CONSTRAINT company_apiKey_FK
-    FOREIGN KEY (apiKey)
+    FOREIGN KEY (idApiKey)
     REFERENCES apiKey (idApiKey)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -54,10 +54,10 @@ CREATE TABLE IF NOT EXISTS state (
   idState INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   isoAlpha2 CHAR(2) NOT NULL,
-  country INT NOT NULL,
+  idCountry INT NOT NULL,
   CONSTRAINT state_idState_PK PRIMARY KEY (idState),
   CONSTRAINT state_country_FK
-    FOREIGN KEY (country)
+    FOREIGN KEY (idCountry)
     REFERENCES country (idCountry)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS city (
   idCity INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   stateAcronym CHAR(2) NOT NULL,
-  state INT NOT NULL,
+  idState INT NOT NULL,
   CONSTRAINT city_idCity_PK PRIMARY KEY (idCity),
   CONSTRAINT city_state_FK
-    FOREIGN KEY (state)
+    FOREIGN KEY (idState)
     REFERENCES state (idState)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -99,14 +99,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   birthDate DATE NOT NULL,
   phone CHAR(14) NOT NULL,
   email VARCHAR(255) NOT NULL,
-  city INT NOT NULL,
+  idCity INT NOT NULL,
   createdBy INT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedBy INT,
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  company INT NOT NULL,
+  idCompany INT NOT NULL,
   CONSTRAINT user_idUser_PK PRIMARY KEY (idUser),
   CONSTRAINT user_cpf_UNIQUE UNIQUE (cpf),
   CONSTRAINT user_phone_UNIQUE UNIQUE (phone),
@@ -114,26 +114,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT user_login_UNIQUE UNIQUE (login),
   CONSTRAINT user_createdBy_FK
     FOREIGN KEY (createdBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT user_updatedBy_FK
     FOREIGN KEY (updatedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT user_deletedBy_FK
     FOREIGN KEY (deletedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT user_company_FK
-    FOREIGN KEY (company)
+    FOREIGN KEY (idCompany)
     REFERENCES company (idCompany)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT user_city_FK
-    FOREIGN KEY (city)
+    FOREIGN KEY (idCity)
     REFERENCES city (idCity)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -164,44 +164,44 @@ CREATE TABLE IF NOT EXISTS unit (
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
   email VARCHAR(255) NOT NULL,
-  city INT NOT NULL,
-  unitType INT NOT NULL,
+  idCity INT NOT NULL,
+  idUnitType INT NOT NULL,
   createdBy INT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedBy INT,
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  company INT NULL,
+  idCompany INT NULL,
   CONSTRAINT unit_idUnit_PK PRIMARY KEY (idUnit),
   CONSTRAINT unit_cnpj_UNIQUE UNIQUE (cnpj),
   CONSTRAINT unit_company_FK
-    FOREIGN KEY (company)
+    FOREIGN KEY (idCompany)
     REFERENCES company (idCompany)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT unit_createdBy_FK
     FOREIGN KEY (createdBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT unit_updatedBy_FK
     FOREIGN KEY (updatedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT unit_deletedBy_FK
     FOREIGN KEY (deletedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT unit_unitType_FK
-    FOREIGN KEY (unitType)
+    FOREIGN KEY (idUnitType)
     REFERENCES unitType (idUnitType)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT unit_city_FK
-    FOREIGN KEY (city)
+    FOREIGN KEY (idCity)
     REFERENCES city (idCity)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -213,37 +213,37 @@ CREATE TABLE IF NOT EXISTS unit (
 
 CREATE TABLE IF NOT EXISTS stockAccountable (
   stockUnit INT NOT NULL,
-  `user` INT NOT NULL,
+  idUser INT NOT NULL,
   createdBy INT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedBy INT,
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  CONSTRAINT stockAccountable_stockUnit_user_PK PRIMARY KEY (stockUnit, `user`),
+  CONSTRAINT stockAccountable_stockUnit_user_PK PRIMARY KEY (stockUnit, idUser),
   CONSTRAINT stockAccountable_stockUnit_FK
     FOREIGN KEY (stockUnit)
     REFERENCES unit (idUnit)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT stockAccountable_user_FK
-    FOREIGN KEY (`user`)
+    FOREIGN KEY (idUser)
     REFERENCES `user` (idUser)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT stockAccountable_createdBy_FK
     FOREIGN KEY (createdBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT stockAccountable_updatedBy_FK
     FOREIGN KEY (updatedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT stockAccountable_deletedBy_FK
     FOREIGN KEY (deletedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -264,17 +264,17 @@ CREATE TABLE IF NOT EXISTS category (
   CONSTRAINT category_idCategory_PK PRIMARY KEY (idCategory),
   CONSTRAINT category_createdBy_FK
 	FOREIGN KEY (createdBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT category_updatedBy_FK
 	FOREIGN KEY (updatedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT category_deletedBy_FK
 	FOREIGN KEY (deletedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION
 );
@@ -291,25 +291,25 @@ CREATE TABLE IF NOT EXISTS subcategory (
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  category INT NOT NULL,
+  idCategory INT NOT NULL,
   CONSTRAINT subcategory_idSubcategory_PK PRIMARY KEY (idSubcategory),
   CONSTRAINT subcategory_createdBy_FK
 	FOREIGN KEY (createdBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT subcategory_updatedBy_FK
 	FOREIGN KEY (updatedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT subcategory_deletedBy_FK
 	FOREIGN KEY (deletedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT subcategory_category_FK
-    FOREIGN KEY (category)
+    FOREIGN KEY (idCategory)
     REFERENCES category (idCategory)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -330,26 +330,26 @@ CREATE TABLE IF NOT EXISTS product (
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  subcategory INT NOT NULL,
+  idSubcategory INT NOT NULL,
   supplierUnit INT NOT NULL,
   CONSTRAINT product_idProduct_PK PRIMARY KEY (idProduct),
   CONSTRAINT product_createdBy_FK
 	FOREIGN KEY (createdBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT product_updatedBy_FK
 	FOREIGN KEY (updatedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT product_deletedBy_FK
 	FOREIGN KEY (deletedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT product_subcategory_FK
-    FOREIGN KEY (subcategory)
+    FOREIGN KEY (idSubcategory)
     REFERENCES subcategory (idSubcategory)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -393,17 +393,17 @@ CREATE TABLE IF NOT EXISTS delivery (
   CONSTRAINT delivery_idDelivery_PK PRIMARY KEY (idDelivery),
   CONSTRAINT delivery_createdBy_FK
 	FOREIGN KEY (createdBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT delivery_updatedBy_FK
 	FOREIGN KEY (updatedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT delivery_deletedBy_FK
 	FOREIGN KEY (deletedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT delivery_shippingUnit_FK
@@ -420,9 +420,9 @@ CREATE TABLE IF NOT EXISTS delivery (
 CREATE TABLE IF NOT EXISTS `transaction` (
   idTransaction INT NOT NULL AUTO_INCREMENT,
   `date` DATE NULL,
-  transactionType INT NOT NULL,
-  delivery INT NOT NULL,
-  unit INT NOT NULL,
+  idTransactionType INT NOT NULL,
+  idDelivery INT NOT NULL,
+  idUnit INT NOT NULL,
   createdBy INT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedBy INT,
@@ -431,33 +431,33 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   deletedAt DATETIME,
   CONSTRAINT transaction_idTransaction_PK PRIMARY KEY (idTransaction),
   CONSTRAINT transaction_transactionType_FK
-    FOREIGN KEY (transactionType)
+    FOREIGN KEY (idTransactionType)
     REFERENCES transactionType (idTransactionType)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT transaction_delivery_FK
-    FOREIGN KEY (delivery)
+    FOREIGN KEY (idDelivery)
     REFERENCES delivery (idDelivery)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT transaction_unit_FK
-    FOREIGN KEY (unit)
+    FOREIGN KEY (idUnit)
     REFERENCES unit (idUnit)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT transaction_createdBy_FK
 	FOREIGN KEY (createdBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT transaction_updatedBy_FK
 	FOREIGN KEY (updatedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION,
   CONSTRAINT transaction_deletedBy_FK
 	FOREIGN KEY (deletedBy)
-	REFERENCES user (idUser)
+	REFERENCES `user` (idUser)
 	ON DELETE NO ACTION
 	ON UPDATE NO ACTION
 );
@@ -467,38 +467,38 @@ CREATE TABLE IF NOT EXISTS `transaction` (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS transactionAccountable (
-  `transaction` INT NOT NULL,
-  `user` INT NOT NULL,
+  idTransaction INT NOT NULL,
+  idUser INT NOT NULL,
   createdBy INT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedBy INT,
   updatedAt DATETIME,
   deletedBy INT,
   deletedAt DATETIME,
-  CONSTRAINT transactionAccountable_transaction_user_PK PRIMARY KEY (`transaction`, `user`),
+  CONSTRAINT transactionAccountable_transaction_user_PK PRIMARY KEY (idTransaction, idUser),
   CONSTRAINT transactionAccountable_transaction_FK
-    FOREIGN KEY (`transaction`)
+    FOREIGN KEY (idTransaction)
     REFERENCES `transaction` (idTransaction)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT transactionAccountable_user_FK
-    FOREIGN KEY (`user`)
+    FOREIGN KEY (idUser)
     REFERENCES `user` (idUser)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT transactionAccountable_createdBy_FK
     FOREIGN KEY (createdBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT transactionAccountable_updatedBy_FK
     FOREIGN KEY (updatedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT transactionAccountable_deletedBy_FK
     FOREIGN KEY (deletedBy)
-    REFERENCES user (idUser)
+    REFERENCES `user` (idUser)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -530,16 +530,16 @@ CREATE TABLE IF NOT EXISTS permission (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS rolePermissions (
-  `role` INT NOT NULL,
-  permission INT NOT NULL,
-  CONSTRAINT rolePermissions_role_permission_PK PRIMARY KEY (`role`, permission),
+  idRole INT NOT NULL,
+  idPermission INT NOT NULL,
+  CONSTRAINT rolePermissions_role_permission_PK PRIMARY KEY (idRole, idPermission),
   CONSTRAINT rolePermissions_permission_FK
-    FOREIGN KEY (permission)
+    FOREIGN KEY (idPermission)
     REFERENCES permission (idPermission)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT rolePermissions_role_FK
-    FOREIGN KEY (`role`)
+    FOREIGN KEY (idRole)
     REFERENCES `role` (idRole)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -550,16 +550,16 @@ CREATE TABLE IF NOT EXISTS rolePermissions (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS userRoles (
-  `user` INT NOT NULL,
-  `role` INT NOT NULL,
-  CONSTRAINT userRoles_user_role_PK PRIMARY KEY (`user`, `role`),
+  idUser INT NOT NULL,
+  idRole INT NOT NULL,
+  CONSTRAINT userRoles_user_role_PK PRIMARY KEY (idUser, idRole),
   CONSTRAINT userRoles_user_FK
-    FOREIGN KEY (`user`)
+    FOREIGN KEY (idUser)
     REFERENCES `user` (idUser)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT userRoles_role_FK
-    FOREIGN KEY (`role`)
+    FOREIGN KEY (idRole)
     REFERENCES `role` (idRole)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -570,17 +570,17 @@ CREATE TABLE IF NOT EXISTS userRoles (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS transactionProducts (
-  `transaction` INT NOT NULL,
-  product INT NOT NULL,
+  idTransaction INT NOT NULL,
+  idProduct INT NOT NULL,
   quantity INT NOT NULL,
-  CONSTRAINT transactionProducts_transaction_product_PK PRIMARY KEY (`transaction`, product),
+  CONSTRAINT transactionProducts_transaction_product_PK PRIMARY KEY (idTransaction, idProduct),
   CONSTRAINT transactionProducts_product_FK
-    FOREIGN KEY (product)
+    FOREIGN KEY (idProduct)
     REFERENCES product (idProduct)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT transactionProducts_transaction_FK
-    FOREIGN KEY (`transaction`)
+    FOREIGN KEY (idTransaction)
     REFERENCES `transaction` (idTransaction)
     ON DELETE CASCADE
     ON UPDATE NO ACTION

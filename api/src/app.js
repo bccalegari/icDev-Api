@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const db = require('./models/index');
+const db = require('./models');
 
 const express = require('express');
 
@@ -17,5 +17,20 @@ const test = async () => {
 };
 
 test();
+
+const teste = async () => {
+	const company = await db.city.findByPk(1, {
+		include: db.state
+	});
+	console.log(company);
+};
+
+teste();
+
+//db.apiKey.create({'key': 'dsasdsasdsasdsws'});
+
+//db.company.findById();
+
+//db.company.create({'name': 'dsadsadadsa', 'idApiKey': 1});
 
 module.exports = app;
