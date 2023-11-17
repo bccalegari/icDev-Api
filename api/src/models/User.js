@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: 'idCompany'
 			});
 
+			User.belongsToMany(models.role, {
+				foreignKey: 'idUser',
+				through: 'userRoles' });
+
 		}
 	}
 
@@ -84,7 +88,7 @@ module.exports = (sequelize, DataTypes) => {
 				},
 				isUnique(value) {
 					if (value != null) {
-						return User.findOne({where:{login:value}})
+						return User.findOne({ where: { login: value } })
 							.then((company) => {
 								if (company) {
 									throw new Error('login already exists');
@@ -131,7 +135,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'cpf must be 11 characters long'
 				},
 				isUnique(value) {
-					return User.findOne({where:{cpf:value}})
+					return User.findOne({ where: { cpf: value } })
 						.then((user) => {
 							if (user) {
 								throw new Error('cpf already exists');
@@ -229,7 +233,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'phone must be less than 14 characters'
 				},
 				isUnique(value) {
-					return User.findOne({where:{phone:value}})
+					return User.findOne({ where: { phone: value } })
 						.then((user) => {
 							if (user) {
 								throw new Error('phone already exists');
@@ -257,7 +261,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'email must be a valid email'
 				},
 				isUnique(value) {
-					return User.findOne({where:{email:value}})
+					return User.findOne({ where:{ email: value } })
 						.then((user) => {
 							if (user) {
 								throw new Error('email already exists');

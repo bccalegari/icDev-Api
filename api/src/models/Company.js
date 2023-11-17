@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'idApiKey must be an integer'
 				},
 				isUnique(value) {
-					return Company.findOne({where:{idApiKey:value}})
+					return Company.findOne({ where: { idApiKey: value } })
 						.then((company) => {
 							if (company) {
 								throw new Error('idApiKey already exists');
