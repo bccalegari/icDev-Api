@@ -1,7 +1,7 @@
 /**
- * Abstract Service Class
+ * Abstract Repository Class
  */
-class AbstractService {
+class AbstractRepository {
 
 	/**
      * Database access (sequelize | models)
@@ -12,7 +12,7 @@ class AbstractService {
 	#db;
 
 	/**
-     * Abstract Service Class Constructor
+     * Abstract Repository Class Constructor
      * @param { String } model 
      */
 	constructor(model) {
@@ -86,4 +86,4 @@ class AbstractService {
 	}
 }
 
-module.exports = AbstractService;
+module.exports = AbstractRepository;
