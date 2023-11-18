@@ -24,9 +24,11 @@ CREATE TABLE IF NOT EXISTS apiKey (
 CREATE TABLE IF NOT EXISTS company (
   idCompany INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
+  code VARCHAR(16) NOT NULL,
   idApiKey INT NOT NULL,
   CONSTRAINT company_idCompany_PK PRIMARY KEY (idCompany),
   CONSTRAINT company_apiKey_UNIQUE UNIQUE (idApiKey),
+  CONSTRAINT company_code_UNIQUE UNIQUE (code),
   CONSTRAINT company_apiKey_FK
     FOREIGN KEY (idApiKey)
     REFERENCES apiKey (idApiKey)
@@ -89,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` VARCHAR(50) NOT NULL,
   lastName VARCHAR(50) NOT NULL,
   login VARCHAR(30),
-  `password` VARCHAR(32),
+  `password` VARCHAR(80),
   cpf CHAR(11) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
@@ -627,7 +629,7 @@ INSERT INTO apiKey (`key`) VALUES ('f5bc9cb12c0525c7');
 -- Table company
 -- -----------------------------------------------------
 
-INSERT INTO company (`name`, idApiKey) VALUES ('icDev', 1);
+INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', 'db19f9700a92fbce', 1);
 
 -- -----------------------------------------------------
 -- Table user

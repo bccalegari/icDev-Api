@@ -1,4 +1,4 @@
-const database = require('./models');
+const database = require('../models');
 
 /**
  * Abstract Repository Class
@@ -85,7 +85,7 @@ class AbstractRepository {
      * @returns { Promise<Model> }
      */
 	async getOneLazyElement(where = {}) {
-		return this.#db[this.model].findOne({ ...where });
+		return this.#db[this.model].findOne({ where: { ...where } });
 	}
 
 	/**
@@ -96,6 +96,28 @@ class AbstractRepository {
      */
 	async getOneEagerElement(where = {}, includes = []) {
 		return this.#db[this.model].findOne({  where: { ...where } , include: [ ...includes ] });
+	}
+
+
+	/**
+      * Insert an element
+      * @param { Object } elementData 
+      * @param { Transaction } transaction 
+      * @returns { Promise<Model> } element
+      * @throws { Error } If elementData is empty or transaction is not found
+      */
+	async insertElement(elementData = {}, transaction) {
+
+		if (!elementData) {
+			throw new Error('Empty element data');
+		}
+
+		if (!transaction) {
+			throw new Error('Transaction not found');
+		}
+
+		return await this.#db[this.model].create(elementData, { transaction: transaction });
+          
 	}
 }
 
