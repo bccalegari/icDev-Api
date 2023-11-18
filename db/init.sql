@@ -90,7 +90,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   lastName VARCHAR(50) NOT NULL,
   login VARCHAR(30),
   `password` VARCHAR(32),
-  salt VARCHAR(32),
   cpf CHAR(11) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
@@ -617,3 +616,46 @@ LOAD DATA INFILE '../mysql-files/data/cities.csv' INTO TABLE city
     ENCLOSED BY '"'
     LINES TERMINATED BY '\n'
     IGNORE 1 ROWS;
+
+-- -----------------------------------------------------
+-- Table apiKey
+-- -----------------------------------------------------
+
+INSERT INTO apiKey (`key`) VALUES ('f5bc9cb12c0525c7');
+
+-- -----------------------------------------------------
+-- Table company
+-- -----------------------------------------------------
+
+INSERT INTO company (`name`, idApiKey) VALUES ('icDev', 1);
+
+-- -----------------------------------------------------
+-- Table user
+-- -----------------------------------------------------
+
+INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
+  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', '11111111111', 'icDev Street', 777, 'icDev District', '1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+
+-- -----------------------------------------------------
+-- Table permission
+-- -----------------------------------------------------
+
+INSERT INTO permission (`name`, `description`) VALUES ('Root', 'Full permission');
+
+-- -----------------------------------------------------
+-- Table role
+-- -----------------------------------------------------
+
+INSERT INTO role (`name`, `description`) VALUES ('Root', 'Root user, has full permission');
+
+-- -----------------------------------------------------
+-- Table rolePermissions
+-- -----------------------------------------------------
+
+INSERT INTO rolePermissions (idRole, idPermission) VALUES (1, 1);
+
+-- -----------------------------------------------------
+-- Table userRoles
+-- -----------------------------------------------------
+
+INSERT INTO userRoles (idUser, idRole) VALUES (1, 1);

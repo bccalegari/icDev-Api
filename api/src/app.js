@@ -46,8 +46,8 @@ db.user.findByPk(6).then((user) => user.destroy({
 
 /*
 const teste = async () => {
-	const model = await db.rolePermissions.findOne({where: {idRole: 1, idPermission: 1}, include: [db.role, db.permission]});
-	console.log(model);
+	const model = await db.user.findOne({where: {idUser: 1}, include: {model: db.company, include: 'apiKey'}});
+	console.log(model.company.apiKey.key);
 };
 
 teste();

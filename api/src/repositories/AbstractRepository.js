@@ -1,5 +1,9 @@
+const database = require('./models');
+
 /**
  * Abstract Repository Class
+ * 
+ * Responsible for intermediating between the business rule layer and data persistence
  */
 class AbstractRepository {
 
@@ -16,8 +20,17 @@ class AbstractRepository {
      * @param { String } model 
      */
 	constructor(model) {
-		this.#db = require('./models');
+		this.#db = database;
 		this.model = model;
+	}
+
+	/**
+      * Return a database model
+      * @param { String } model 
+      * @returns { Object } model
+      */
+	getDatabaseModel(model) {
+		return this.#db[model];
 	}
 
 	/**
@@ -58,8 +71,8 @@ class AbstractRepository {
 
 	/**
      * Get all elements (Eager Loading)
-     * @param { * } where 
-     * @param { * } includes 
+     * @param { Object } where 
+     * @param { Object|String } includes
      * @returns { Promise<(Array<Model>)> }
      */
 	async getAllEagerElements(where = {}, includes = []) {
@@ -68,7 +81,7 @@ class AbstractRepository {
 
 	/**
      * Get one element (Lazy Loading)
-     * @param { * } where 
+     * @param { Object } where 
      * @returns { Promise<Model> }
      */
 	async getOneLazyElement(where = {}) {
@@ -77,8 +90,8 @@ class AbstractRepository {
 
 	/**
      * Get one element (Eager Loading)
-     * @param { * } where 
-     * @param { * } includes
+     * @param { Object } where 
+     * @param { Object|String } includes
      * @returns { Promise<Model> }
      */
 	async getOneEagerElement(where = {}, includes = []) {

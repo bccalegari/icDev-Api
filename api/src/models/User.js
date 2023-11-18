@@ -109,16 +109,6 @@ module.exports = (sequelize, DataTypes) => {
 				}
 			}
 		},
-		salt: {
-			type: DataTypes.STRING(32),
-			allowNull: true,
-			validate: {
-				len: {
-					args: [0, 32],
-					msg: 'password must be less than 32 characters'
-				}
-			}
-		},
 		cpf: {
 			type: DataTypes.STRING(11),
 			allowNull: false,
