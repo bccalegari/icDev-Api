@@ -19,5 +19,26 @@ module.exports = {
 				acquire: 30000,
 			}
 		}
+	},
+	test: {
+		database: process.env.TEST_DB_NAME,
+		username: process.env.TEST_DB_USER,
+		password: process.env.TEST_DB_PASSWORD,
+		options: {
+			host: process.env.TEST_DB_HOST,
+			port: process.env.TEST_DB_PORT,
+			dialect: 'mysql',
+			define: {
+				freezeTableName: true,
+				timestamps: false
+			},
+			logging: false,
+			pool: {
+				max: 5,
+				min: 0,
+				idle: 10000,
+				acquire: 30000,
+			}
+		}
 	}
 };

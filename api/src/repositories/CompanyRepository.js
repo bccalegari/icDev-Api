@@ -30,7 +30,7 @@ class CompanyRepository extends AbstractRepository {
 			return company;
 			
 		} catch (error) {
-			throw ApiError.badRequest();
+			throw ApiError.badRequest(error.message);
 		}
 
 	}

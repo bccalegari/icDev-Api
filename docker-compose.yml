@@ -2,6 +2,48 @@ version: '3.8'
 
 services:
 
+  db:
+    image: mysql:8.0
+    container_name: icdev_db
+    env_file: ./.env
+    expose: [3306]
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=icDev
+      - MYSQL_PORT=3306
+    ports:
+      - "$DB_LOCAL_PORT:3306" 
+    networks:
+      icDev_network:
+        aliases:
+            - db
+    volumes:
+      - database:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/my.cnf:/etc/my.cnf
+      - ./db:/var/lib/mysql-files
+  
+  testdb:
+    image: mysql:8.0
+    container_name: icdev_test_db
+    env_file: ./.env
+    expose: [3305]
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=icDevTest
+      - MYSQL_TCP_PORT=3305
+    ports:
+      - "$TEST_DB_LOCAL_PORT:3305" 
+    networks:
+      icDev_network:
+        aliases:
+            - testdb
+    volumes:
+      - test_database:/var/lib/mysql
+      - ./db/test/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/test/my.cnf:/etc/my.cnf
+      - ./db:/var/lib/mysql-files
+      
   app:
     build: ./api
     image: node:18-alpine
@@ -15,10 +57,15 @@ services:
       - APP_ENV=$APP_ENV
       - PORT=8000
       - DB_HOST=db
-      - DB_USER=$DB_USER
-      - DB_PASSWORD=$DB_ROOT_PASSWORD
+      - DB_USER=root
+      - DB_PASSWORD=root
       - DB_NAME=icDev
       - DB_PORT=3306
+      - TEST_DB_HOST=testdb
+      - TEST_DB_USER=root
+      - TEST_DB_PASSWORD=root
+      - TEST_DB_NAME=icDevTest
+      - TEST_DB_PORT=3305
     networks:
       icDev_network:
         aliases:
@@ -28,28 +75,9 @@ services:
     depends_on:
       db:
         condition: service_started
-
-  db:
-    image: mysql:8.0
-    container_name: icdev_db
-    env_file: ./.env
-    expose: [3306]
-    environment:
-      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
-      - MYSQL_DATABASE=icDev
-      - MYSQL_PORT=3306
-    ports:
-      - "$DB_LOCAL_PORT:3306" 
-    networks:
-      icDev_network:
-        aliases:
-            - db
-    volumes:
-      - database:/var/lib/mysql
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./db/my.cnf:/etc/my.cnf
-      - ./db/:/var/lib/mysql-files
-
+      testdb:
+        condition: service_started
+  
   proxy:
     build: ./nginx
     image: nginx:stable
@@ -75,3 +103,5 @@ networks:
 volumes: 
   database:
     name: icDev_database
+  test_database:
+    name: icDevTest_database
