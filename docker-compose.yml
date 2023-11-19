@@ -42,7 +42,6 @@ services:
       - test_database:/var/lib/mysql
       - ./db/test/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db/test/my.cnf:/etc/my.cnf
-      - ./db:/var/lib/mysql-files
       
   app:
     build: ./api
@@ -56,6 +55,7 @@ services:
     environment:
       - APP_ENV=$APP_ENV
       - PORT=8000
+      - PROXY_PORT=8080
       - DB_HOST=db
       - DB_USER=root
       - DB_PASSWORD=root

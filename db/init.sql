@@ -635,6 +635,8 @@ INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', 'db19f9700a92fbce'
 -- Table user
 -- -----------------------------------------------------
 
+-- Password = icdev!root
+
 INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
   VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', '11111111111', 'icDev Street', 777, 'icDev District', '1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
 

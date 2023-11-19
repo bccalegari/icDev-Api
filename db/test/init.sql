@@ -596,28 +596,21 @@ CREATE TABLE IF NOT EXISTS transactionProducts (
 -- -----------------------------------------------------
 
 INSERT INTO country (`name`, isoAlpha2, isoAlpha3) 
-  VALUES ('Brazil', 'BR', 'BRA'), 
-  ('United States of America', 'US', 'USA');
+  VALUES ('Test Country', 'TC', 'TCT');
 
 -- -----------------------------------------------------
 -- Table state
 -- -----------------------------------------------------
 
-LOAD DATA INFILE '../mysql-files/data/states.csv' INTO TABLE `state`
-    FIELDS TERMINATED BY ','
-    ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
-    IGNORE 1 ROWS;
+INSERT INTO `state` (`name`, isoAlpha2, idCountry) 
+  VALUES ('Test State', 'TS', 1);
 
 -- -----------------------------------------------------
 -- Table city
 -- -----------------------------------------------------
 
-LOAD DATA INFILE '../mysql-files/data/cities.csv' INTO TABLE city
-    FIELDS TERMINATED BY ','
-    ENCLOSED BY '"'
-    LINES TERMINATED BY '\n'
-    IGNORE 1 ROWS;
+INSERT INTO city (`name`, stateAcronym, idState) 
+  VALUES ('Test City', 'TS', 1);
 
 -- -----------------------------------------------------
 -- Table apiKey
@@ -628,26 +621,29 @@ INSERT INTO apiKey (`key`) VALUES ('1111111111111111');
 -- -----------------------------------------------------
 -- Table company
 -- -----------------------------------------------------
-INSERT INTO company (`name`, code, idApiKey) VALUES ('icDevTest', '1111111111111111', 1);
+
+INSERT INTO company (`name`, code, idApiKey) VALUES ('Test Company', '1111111111111111', 1);
 
 -- -----------------------------------------------------
 -- Table user
 -- -----------------------------------------------------
 
+-- Password = 123
+
 INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
-  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', '11111111111', 'icDev Street', 777, 'icDev District', '1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+  VALUES ('Test', 'Pengu', 'icdev.root', '$2a$10$LMrG2zc49pr0pLa7AOm5SeJgSxphKIaO/oxvXAK5mrwKPvjFWppiy', '11111111111', 'Test Street', 777, 'Test District', '1995-12-04', '11111111111', 'testPengu@test.com', 1, 1, 1);
 
 -- -----------------------------------------------------
 -- Table permission
 -- -----------------------------------------------------
 
-INSERT INTO permission (`name`, `description`) VALUES ('Root', 'Full permission');
+INSERT INTO permission (`name`, `description`) VALUES ('tRoot', 'Test full permission');
 
 -- -----------------------------------------------------
 -- Table role
 -- -----------------------------------------------------
 
-INSERT INTO role (`name`, `description`) VALUES ('Root', 'Root user, has full permission');
+INSERT INTO role (`name`, `description`) VALUES ('tRoot', 'tRoot user, has test full permission');
 
 -- -----------------------------------------------------
 -- Table rolePermissions
