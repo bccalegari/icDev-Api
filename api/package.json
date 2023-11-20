@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint --fix .",
     "dev": "npm install && nodemon server.js",
-    "test": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles",
+    "test": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose",
+    "test:coverage": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --coverage",
     "start": "node server.js"
   },
   "keywords": [],

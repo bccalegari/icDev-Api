@@ -4,21 +4,21 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
-	class rolePermissions extends Model {
+	class RolePermissions extends Model {
 
 		static associate(models) {
 
-			rolePermissions.belongsTo(models.role, { 
+			RolePermissions.belongsTo(models.role, { 
 				foreignKey: 'idRole'});
 				
-			rolePermissions.belongsTo(models.permission, {
+			RolePermissions.belongsTo(models.permission, {
 				foreignKey: 'idRole'});
 			
 		}
 
 	}
 
-	rolePermissions.init({
+	RolePermissions.init({
 		idRole: {
 			type: DataTypes.INTEGER,
 			allowNull: false
@@ -34,5 +34,5 @@ module.exports = (sequelize, DataTypes) => {
 		freezeTableName: true
 	});
 
-	return rolePermissions;
+	return RolePermissions;
 };

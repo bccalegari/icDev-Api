@@ -1,5 +1,5 @@
 const { describe, test, expect } = require('@jest/globals');
-const crypto = require('crypto');
+const DataBuilder = require('../utils/DataBuilder');
 
 const ApiKey = require('../../models/').apiKey;
 
@@ -20,7 +20,7 @@ describe('ApiKey Model Tests', () => {
 
 	test('isApiKey_BeingSaved_True', async () => {
 
-		const apiKey = await ApiKey.create({key: crypto.randomBytes(8).toString('hex')});
+		const apiKey = await ApiKey.create({ key: DataBuilder.randomString(16) });
 		expect(apiKey).not.toBeNull();
 		await apiKey.destroy();
 
@@ -31,18 +31,19 @@ describe('ApiKey Model Tests', () => {
 		const apiKeys = await ApiKey.findAll();
 		const lastApiKey = apiKeys.pop();
 
-		const apiKey = await ApiKey.create({key: crypto.randomBytes(8).toString('hex')});
+		const apiKey = await ApiKey.create({ key: DataBuilder.randomString(16) });
 		expect(apiKey.idApiKey).toBeGreaterThan(lastApiKey.idApiKey);
 
 		await apiKey.destroy();
+		
 	});
 
 	test('isApiKey_BeingUpdated_True', async () => {
 
-		const newApiKey = crypto.randomBytes(8).toString('hex');
+		const newApiKey = DataBuilder.randomString(16) ;
 
-		const apiKeyBeforeUpdate = await ApiKey.create({key: crypto.randomBytes(8).toString('hex')});
-		const apiKeyAfterUpdate = await apiKeyBeforeUpdate.update({key: newApiKey});
+		const apiKeyBeforeUpdate = await ApiKey.create({ key: DataBuilder.randomString(16) });
+		const apiKeyAfterUpdate = await apiKeyBeforeUpdate.update({ key: newApiKey });
 
 		expect(apiKeyAfterUpdate.key).toBe(newApiKey);
 		await apiKeyAfterUpdate.destroy();
@@ -50,7 +51,7 @@ describe('ApiKey Model Tests', () => {
 
 	test('isApiKey_BeingDeleted_True', async () => {
 
-		const apiKeyBeforeDelete = await ApiKey.create({key: crypto.randomBytes(8).toString('hex')});
+		const apiKeyBeforeDelete = await ApiKey.create({ key: DataBuilder.randomString(16) });
 		await apiKeyBeforeDelete.destroy();
 
 		const apiKeyAfterDelete = await ApiKey.findByPk(apiKeyBeforeDelete.idApiKey);
@@ -58,10 +59,10 @@ describe('ApiKey Model Tests', () => {
 
 	});
 
-	test('isApiKeyConstraintKeyMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isApiKeyKeyConstraintMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
-			await ApiKey.create({key: crypto.randomBytes(9).toString('hex')});
+			await ApiKey.create({ key: DataBuilder.randomString(17) });
 		}).rejects.toThrow();
         
 	});
