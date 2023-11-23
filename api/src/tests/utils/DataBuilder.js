@@ -58,6 +58,16 @@ class DataBuilder {
 		return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 	}
 
+	/**
+      * Generates a random email
+	  * @param { String } emailUsernameLength length of email username, default is 20
+	  * @param { String } emailDomainLength length of email domain, default is 5
+      * @returns { String } Random Email
+      */
+	static randomEmail(emailUsernameLength=20, emailDomainLength=5) {
+		return `${this.randomString(emailUsernameLength)}@${this.randomString(emailDomainLength)}.com`;
+	}
+
 }
 
 module.exports = DataBuilder;

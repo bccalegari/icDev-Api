@@ -38,6 +38,8 @@ module.exports = {
 				min: 0,
 				idle: 10000,
 				acquire: 30000,
+				evict: 10000,
+				handleDisconnects: true
 			}
 		}
 	}

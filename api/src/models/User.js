@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, ValidationError } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -274,11 +274,8 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		createdBy: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 			validate: {
-				notNull: {
-					msg: 'createdBy is required'
-				},
 				isInt: {
 					msg: 'createdBy must be an integer'
 				}
@@ -340,15 +337,24 @@ module.exports = (sequelize, DataTypes) => {
 	}, {
 		hooks: {
 			beforeCreate: (user, options) => {
-				user.createdBy = options.user;
+				if (!options.createdBy) {
+					throw new ValidationError('createdBy is required');
+				}
+				user.createdBy = options.createdBy;
 				user.createdAt = new Date();
 			},
 			beforeUpdate: (user, options) => {
-				user.updatedBy = options.user;
+				if (!options.updatedBy) {
+					throw new ValidationError('updatedBy is required');
+				}
+				user.updatedBy = options.updatedBy;
 				user.updatedAt = new Date();
 			},
 			beforeDestroy: (user, options) => {
-				user.deletedBy = options.user;
+				if (!options.deletedBy) {
+					throw new ValidationError('deletedBy is required');
+				}
+				user.deletedBy = options.createdBy;
 			}
 		},
 		sequelize,
