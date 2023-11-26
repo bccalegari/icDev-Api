@@ -33,7 +33,7 @@ describe('City Model Tests', () => {
 		const cities = await City.findAll();
 		const lastCity = cities.pop();
 
-		const city = await await City.create({ name: DataBuilder.randomString(50), stateAcronym: DataBuilder.randomString(2), idState: 1 });
+		const city = await City.create({ name: DataBuilder.randomString(50), stateAcronym: DataBuilder.randomString(2), idState: 1 });
 		expect(city.idCity).toBeGreaterThan(lastCity.idCity);
 
 		await city.destroy();

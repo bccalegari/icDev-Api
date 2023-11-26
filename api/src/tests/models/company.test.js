@@ -1,14 +1,14 @@
-const { describe, test, expect, afterAll, beforeEach } = require('@jest/globals');
+const { describe, test, expect, afterAll, beforeAll } = require('@jest/globals');
 const DataBuilder = require('../utils/DataBuilder');
 
 const Company = require('../../models').company;
 const ApiKey = require('../../models').apiKey;
 
-let testApiKey;
-
 describe('Company Model Tests', () => {
 
-	beforeEach(async () => {
+	let testApiKey;
+
+	beforeAll(async () => {
 		testApiKey = await ApiKey.create({ key: DataBuilder.randomString(16) });
 	});
 
