@@ -37,6 +37,32 @@ describe('User Model Tests', () => {
 
 	});
 
+	test('isUser_BeingSaved_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(user).not.toBeNull();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
 	test('isUser_SequenceUp_True', async () => {
 
 		const users = await User.findAll();
@@ -59,8 +85,7 @@ describe('User Model Tests', () => {
 		});
 
 		await user.destroy({
-			force: true,
-			deletedBy: 1
+			force: true
 		});
 
 		expect(user.idUser).toBeGreaterThan(lastUser.idUser);
@@ -92,8 +117,7 @@ describe('User Model Tests', () => {
 		});
 
 		await userAfterUpdate.destroy({
-			force: true,
-			deletedBy: 1
+			force: true
 		});
 
 		expect(userAfterUpdate.name).toBe(newName);
@@ -119,8 +143,7 @@ describe('User Model Tests', () => {
 		});
 
 		await userBeforeDelete.destroy({
-			force: true,
-			deletedBy: 1
+			force: true
 		});
 
 		const userAfterDelete = await User.findByPk(userBeforeDelete.idUser);
@@ -128,7 +151,7 @@ describe('User Model Tests', () => {
 
 	});
 
-	test('isUserConstraintsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isUserValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({
@@ -153,7 +176,7 @@ describe('User Model Tests', () => {
         
 	});
 
-	test('isUserConstraintsNotNull_BeingNull_ThrowingException', async () => {
+	test('isUserValidationsNotNull_BeingNull_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({});
@@ -161,7 +184,7 @@ describe('User Model Tests', () => {
         
 	});
 
-	test('isUserConstraintsNotEmpty_BeingEmpty_ThrowingException', async () => {
+	test('isUserValidationsNotEmpty_BeingEmpty_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({
@@ -183,7 +206,7 @@ describe('User Model Tests', () => {
         
 	});
 
-	test('isUserConstraintsIsInteger_BeingNotInteger_ThrowingException', async () => {
+	test('isUserValidationsIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({
@@ -205,7 +228,7 @@ describe('User Model Tests', () => {
         
 	});
 
-	test('isUserConstraintsUnique_BeingNotUnique_ThrowingException', async () => {
+	test('isUserValidationsUnique_BeingNotUnique_ThrowingException', async () => {
 
 		expect(async () => {
 
@@ -234,7 +257,7 @@ describe('User Model Tests', () => {
         
 	});
 
-	test('isUserBirthDateConstraintIsDate_BeingNotDate_ThrowingException', async () => {
+	test('isUserBirthDateValidationIsDate_BeingNotDate_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({
@@ -256,7 +279,7 @@ describe('User Model Tests', () => {
 
 	});
 
-	test('isUserBirthDateConstraintIsBeforeToday_BeingNotBeforeToday_ThrowingException', async () => {
+	test('isUserBirthDateValidationIsBeforeToday_BeingNotBeforeToday_ThrowingException', async () => {
 
 		let futureDate = new Date();
 		futureDate = futureDate.setDate(futureDate.getDate() + 1);
@@ -281,7 +304,7 @@ describe('User Model Tests', () => {
 
 	});
 
-	test('isUserEmailConstraintIsEmail_BeingNotEmail_ThrowingException', async () => {
+	test('isUserEmailValidationIsEmail_BeingNotEmail_ThrowingException', async () => {
 
 		expect(async () => {
 			await User.create({
@@ -301,6 +324,815 @@ describe('User Model Tests', () => {
 			});
 		}).rejects.toThrow();
 
+	});
+
+	test('isUserBeforeCreateHook_BeingUsed_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(user.createdBy).not.toBeNull();
+
+		expect(user.createdAt).not.toBeNull();
+
+		expect(typeof(user.createdBy)).toEqual('number');
+
+		expect(user.createdAt).toEqual(expect.any(Date));
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeCreateHookCreatedByValidationNotNull_BeingNull_ThrowingException', async () => {
+
+		expect(async () => {
+			await User.create({
+				name: DataBuilder.randomString(50),
+				lastName: DataBuilder.randomString(50),
+				cpf: DataBuilder.randomString(11),
+				street: DataBuilder.randomString(150),
+				streetNumber: DataBuilder.randomInteger(),
+				district: DataBuilder.randomString(150),
+				birthDate: DataBuilder.randomDate(),
+				phone: DataBuilder.randomString(14),
+				email: DataBuilder.randomEmail(),
+				idCity: 1,
+				idCompany: 1,
+			});
+		}).rejects.toThrow();
+
+	});
+
+	test('isUserBeforeCreateHookCreatedByValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
+
+		expect(async () => {
+			await User.create({
+				name: DataBuilder.randomString(50),
+				lastName: DataBuilder.randomString(50),
+				cpf: DataBuilder.randomString(11),
+				street: DataBuilder.randomString(150),
+				streetNumber: DataBuilder.randomInteger(),
+				district: DataBuilder.randomString(150),
+				birthDate: DataBuilder.randomDate(),
+				phone: DataBuilder.randomString(14),
+				email: DataBuilder.randomEmail(),
+				idCity: 1,
+				idCompany: 1,
+			}, {
+				createdBy: DataBuilder.randomString(2)
+			});
+		}).rejects.toThrow();
+
+	});
+
+	test('isUserBeforeCreateHookCreatedAtValidationIsNull_BeingNotNull_ThrowingException', async () => {
+
+		expect(async () => {
+			await User.create({
+				name: DataBuilder.randomString(50),
+				lastName: DataBuilder.randomString(50),
+				cpf: DataBuilder.randomString(11),
+				street: DataBuilder.randomString(150),
+				streetNumber: DataBuilder.randomInteger(),
+				district: DataBuilder.randomString(150),
+				birthDate: DataBuilder.randomDate(),
+				phone: DataBuilder.randomString(14),
+				email: DataBuilder.randomEmail(),
+				idCity: 1,
+				idCompany: 1,
+			}, {
+				createdBy: 1,
+				createdAt: new Date()
+			});
+		}).rejects.toThrow();
+
+	});
+
+	test('isUserBeforeUpdateHook_BeingUsed_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.update({ name: DataBuilder.randomString(50) }, {
+			updatedBy: 1
+		});
+
+		expect(user.updatedBy).not.toBeNull();
+
+		expect(user.updatedAt).not.toBeNull();
+
+		expect(typeof(user.updatedBy)).toEqual('number');
+
+		expect(user.updatedAt).toEqual(expect.any(Date));
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeUpdateHookUpdatedByValidationNotNull_BeingNull_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.update({ name: DataBuilder.randomString(50) });
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeUpdateHookUpdatedByValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.update({ name: DataBuilder.randomString(50) }, {
+				updatedBy: DataBuilder.randomString(2)
+			});
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeUpdateHookUpdatedAtValidationIsNull_BeingNotNull_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.update({ name: DataBuilder.randomString(50) }, {
+				updatedBy: DataBuilder.randomString(2),
+				updatedAt: new Date()
+			});
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeDeleteHook_BeingUsed_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.destroy({ deletedBy: 1 });
+
+		expect(user.deletedBy).not.toBeNull();
+
+		expect(user.deletedAt).not.toBeNull();
+
+		expect(typeof(user.deletedBy)).toEqual('number');
+
+		expect(user.deletedAt).toEqual(expect.any(Date));
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeDeleteHookDeletedByValidationNotNull_BeingNull_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.destroy();
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeDeleteHookDeletedByValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.destroy({
+				deletedBy: DataBuilder.randomString(2)
+			});
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserBeforeDeleteHookDeletedAtValidationIsNull_BeingNotNull_ThrowingException', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		expect(async () => {
+			await user.destroy({
+				deletedBy: 1,
+				deletedAt: new Date()
+			});
+		}).rejects.toThrow();
+
+		await user.destroy({
+			force: true
+		});
+
+	});
+
+	test('isUserIdCityForeignKey_PerformingLazyAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const city = await user.getCity();
+
+		expect(city).not.toBeNull();
+
+		expect(city).toEqual(expect.objectContaining({
+			idCity: expect.any(Number),
+			name: expect.any(String),
+			stateAcronym: expect.any(String),
+			idState: expect.any(Number)
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserIdCityForeignKey_PerformingEagerAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const city = (await User.findByPk(user.idUser, { include: ['city'] })).city;
+
+		expect(city).not.toBeNull();
+
+		expect(city).toEqual(expect.objectContaining({
+			idCity: expect.any(Number),
+			name: expect.any(String),
+			stateAcronym: expect.any(String),
+			idState: expect.any(Number)
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserCreatedByForeignKey_PerformingLazyAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const createdBy = await user.getUserCreatedBy();
+
+		expect(createdBy).not.toBeNull();
+
+		expect(createdBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserCreatedByForeignKey_PerformingEagerAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const createdBy = (await User.findByPk(user.idUser, { include: ['userCreatedBy'] })).userCreatedBy;
+
+		expect(createdBy).not.toBeNull();
+
+		expect(createdBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserUpdatedByForeignKey_PerformingLazyAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.update({ name: DataBuilder.randomString(50) }, {
+			updatedBy: 1
+		});
+
+		const updatedBy = await user.getUserUpdatedBy();
+
+		expect(updatedBy).not.toBeNull();
+
+		expect(updatedBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserUpdatedByForeignKey_PerformingEagerAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.update({ name: DataBuilder.randomString(50) }, {
+			updatedBy: 1
+		});
+
+		const updatedBy = (await User.findByPk(user.idUser, { include: ['userUpdatedBy'] })).userUpdatedBy;
+
+		expect(updatedBy).not.toBeNull();
+
+		expect(updatedBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserDeletedByForeignKey_PerformingLazyAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.destroy({ deletedBy: 1 });
+
+		const deletedBy = await user.getUserDeletedBy();
+
+		expect(deletedBy).not.toBeNull();
+
+		expect(deletedBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserDeletedByForeignKey_PerformingEagerAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		await user.destroy({ deletedBy: 1 });
+
+		const deletedBy = (await User.findByPk(user.idUser, { include: ['userDeletedBy'],  paranoid: false })).userDeletedBy;
+
+		expect(deletedBy).not.toBeNull();
+
+		expect(deletedBy).toEqual(expect.objectContaining({
+			idUser: expect.any(Number),
+			name: expect.any(String),
+			lastName: expect.any(String),
+			login: expect.toBeOneOf([expect.any(String), null]),
+			password: expect.toBeOneOf([expect.any(String), null]),
+			cpf: expect.any(String),
+			street: expect.any(String),
+			streetNumber: expect.any(Number),
+			district: expect.any(String),
+			complement: expect.toBeOneOf([expect.any(String), null]),
+			birthDate: expect.any(String),
+			phone: expect.any(String),
+			email: expect.any(String),
+			idCity: expect.any(Number),
+			createdBy: expect.any(Number),
+			createdAt: expect.any(Date),
+			updatedBy: expect.toBeOneOf([expect.any(Number), null]),
+			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
+			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
+			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
+			idCompany: expect.any(Number),
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserIdCompanyForeignKey_PerformingLazyAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const company = await user.getCompany();
+
+		expect(company).not.toBeNull();
+
+		expect(company).toEqual(expect.objectContaining({
+			idCompany: expect.any(Number),
+			name: expect.any(String),
+			code: expect.any(String),
+			idApiKey: expect.any(Number)
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
+	});
+
+	test('isUserIdCompanyForeignKey_PerformingEagerAssociation_True', async () => {
+
+		const user = await User.create({
+			name: DataBuilder.randomString(50),
+			lastName: DataBuilder.randomString(50),
+			cpf: DataBuilder.randomString(11),
+			street: DataBuilder.randomString(150),
+			streetNumber: DataBuilder.randomInteger(),
+			district: DataBuilder.randomString(150),
+			birthDate: DataBuilder.randomDate(),
+			phone: DataBuilder.randomString(14),
+			email: DataBuilder.randomEmail(),
+			idCity: 1,
+			idCompany: 1,
+		}, {
+			createdBy: 1
+		});
+
+		const company = (await User.findByPk(user.idUser, { include: ['company'] })).company;
+
+		expect(company).not.toBeNull();
+
+		expect(company).toEqual(expect.objectContaining({
+			idCompany: expect.any(Number),
+			name: expect.any(String),
+			code: expect.any(String),
+			idApiKey: expect.any(Number)
+		}));
+
+		await user.destroy({
+			force: true
+		});
+        
 	});
 
 });

@@ -61,7 +61,7 @@ describe('Country Model Tests', () => {
 
 	});
 
-	test('isCountryConstraintsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isCountryValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await Country.create({ name: DataBuilder.randomString(51), isoAlpha2: DataBuilder.randomString(3), isoAlpha3: DataBuilder.randomString(4) });
@@ -69,7 +69,7 @@ describe('Country Model Tests', () => {
         
 	});
 
-	test('isCountryConstraintsNotNull_BeingNull_ThrowingException', async () => {
+	test('isCountryValidationsNotNull_BeingNull_ThrowingException', async () => {
 
 		expect(async () => {
 			await Country.create({});
@@ -77,7 +77,7 @@ describe('Country Model Tests', () => {
         
 	});
 
-	test('isCountryConstraintsNotEmpty_BeingEmpty_ThrowingException', async () => {
+	test('isCountryValidationsNotEmpty_BeingEmpty_ThrowingException', async () => {
 
 		expect(async () => {
 			await Country.create({ name: '', isoAlpha2: '', isoAlpha3: '' });

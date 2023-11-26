@@ -62,7 +62,7 @@ describe('State Model Tests', () => {
 
 	});
 
-	test('isStateConstraintsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isStateValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await await State.create({ name: DataBuilder.randomString(51), isoAlpha2: DataBuilder.randomString(3), idCountry: 1 });
@@ -70,7 +70,7 @@ describe('State Model Tests', () => {
         
 	});
 
-	test('isStateConstraintsNotNull_BeingNull_ThrowingException', async () => {
+	test('isStateValidationsNotNull_BeingNull_ThrowingException', async () => {
 
 		expect(async () => {
 			await State.create({});
@@ -78,7 +78,7 @@ describe('State Model Tests', () => {
         
 	});
 
-	test('isStateConstraintsNotEmpty_BeingEmpty_ThrowingException', async () => {
+	test('isStateValidationsNotEmpty_BeingEmpty_ThrowingException', async () => {
 
 		expect(async () => {
 			await State.create({ name: '', isoAlpha2: '', idCountry: 1 });
@@ -86,7 +86,7 @@ describe('State Model Tests', () => {
         
 	});
 
-	test('isStateIdCountryConstraintIsInteger_BeingNotInteger_ThrowingException', async () => {
+	test('isStateIdCountryValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		expect(async () => {
 			await State.create({ name: DataBuilder.randomString(50), isoAlpha2: DataBuilder.randomString(2), idCountry: DataBuilder.randomString(2) });
@@ -115,20 +115,20 @@ describe('State Model Tests', () => {
 
 	test('isStateIdCountryForeignKey_PerformingEagerAssociation_True', async () => {
 
-		const stateBeforeInsert = await State.create({ name: DataBuilder.randomString(50), isoAlpha2: DataBuilder.randomString(2), idCountry: 1 });
+		const state = await State.create({ name: DataBuilder.randomString(50), isoAlpha2: DataBuilder.randomString(2), idCountry: 1 });
 
-		const stateAfterInsert = await State.findByPk(stateBeforeInsert.idState, { include: ['country'] });
+		const country = (await State.findByPk(state.idState, { include: ['country'] })).country;
 
-		expect(stateAfterInsert.country).not.toBeNull();
+		expect(country).not.toBeNull();
 
-		expect(stateAfterInsert.country).toEqual(expect.objectContaining({
+		expect(country).toEqual(expect.objectContaining({
 			idCountry: expect.any(Number),
 			name: expect.any(String),
 			isoAlpha2: expect.any(String),
 			isoAlpha3: expect.any(String),
 		}));
 
-		await stateAfterInsert.destroy();
+		await state.destroy();
         
 	});
 

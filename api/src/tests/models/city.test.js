@@ -62,7 +62,7 @@ describe('City Model Tests', () => {
 
 	});
 
-	test('isCityConstraintsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isCityValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await City.create({ name: DataBuilder.randomString(51), stateAcronym: DataBuilder.randomString(3), idState: 1 });
@@ -70,7 +70,7 @@ describe('City Model Tests', () => {
         
 	});
 
-	test('isCityConstraintsNotNull_BeingNull_ThrowingException', async () => {
+	test('isCityValidationsNotNull_BeingNull_ThrowingException', async () => {
 
 		expect(async () => {
 			await City.create({});
@@ -78,7 +78,7 @@ describe('City Model Tests', () => {
         
 	});
 
-	test('isCityConstraintsNotEmpty_BeingEmpty_ThrowingException', async () => {
+	test('isCityValidationsNotEmpty_BeingEmpty_ThrowingException', async () => {
 
 		expect(async () => {
 			await City.create({ name: '', stateAcronym: '', idState: 1 });
@@ -86,7 +86,7 @@ describe('City Model Tests', () => {
         
 	});
 
-	test('isCityidStateConstraintIsInteger_BeingNotInteger_ThrowingException', async () => {
+	test('isCityidStateValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		expect(async () => {
 			await City.create({ name: DataBuilder.randomString(50), stateAcronym: DataBuilder.randomString(2), idState: DataBuilder.randomString(2) });
@@ -115,20 +115,20 @@ describe('City Model Tests', () => {
 
 	test('isCityIdStateForeignKey_PerformingEagerAssociation_True', async () => {
 
-		const cityBeforeInsert = await City.create({ name: DataBuilder.randomString(50), stateAcronym: DataBuilder.randomString(2), idState: 1 });
+		const city = await City.create({ name: DataBuilder.randomString(50), stateAcronym: DataBuilder.randomString(2), idState: 1 });
 
-		const cityAfterInsert = await City.findByPk(cityBeforeInsert.idCity, { include: ['state'] });
+		const state = (await City.findByPk(city.idCity, { include: ['state'] })).state;
 
-		expect(cityAfterInsert.state).not.toBeNull();
+		expect(state).not.toBeNull();
 
-		expect(cityAfterInsert.state).toEqual(expect.objectContaining({
+		expect(state).toEqual(expect.objectContaining({
 			idState: expect.any(Number),
 			name: expect.any(String),
 			isoAlpha2: expect.any(String),
 			idCountry: expect.any(Number)
 		}));
 
-		await cityAfterInsert.destroy();
+		await city.destroy();
         
 	});
 

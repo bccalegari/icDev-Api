@@ -59,7 +59,7 @@ describe('ApiKey Model Tests', () => {
 
 	});
 
-	test('isApiKeyKeyConstraintMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isApiKeyKeyValidationMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await ApiKey.create({ key: DataBuilder.randomString(17) });

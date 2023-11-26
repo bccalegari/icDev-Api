@@ -11,20 +11,20 @@ module.exports = (sequelize, DataTypes) => {
 			User.belongsTo(models.city, {
 				foreignKey: 'idCity'
 			});
-			
-			User.hasOne(models.user, {
+
+			User.belongsTo(models.user, {
 				foreignKey: 'createdBy',
-				as: 'createdByUser'
+				as: 'userCreatedBy'
 			});
 
-			User.hasOne(models.user, {
+			User.belongsTo(models.user, {
 				foreignKey: 'updatedBy',
-				as: 'updatedByUser'
+				as: 'userUpdatedBy'
 			});
 
-			User.hasOne(models.user, {
+			User.belongsTo(models.user, {
 				foreignKey: 'deletedBy',
-				as: 'deletedByUser'
+				as: 'userDeletedBy'
 			});
 
 			User.belongsTo(models.company, {
@@ -337,24 +337,58 @@ module.exports = (sequelize, DataTypes) => {
 	}, {
 		hooks: {
 			beforeCreate: (user, options) => {
+
 				if (!options.createdBy) {
 					throw new ValidationError('createdBy is required');
 				}
+
+				if (typeof(options.createdBy) !== 'number') {
+					throw new ValidationError('createdBy must be a number');
+				}
+				
+				if(options.createdAt) {
+					throw new ValidationError('createdAt is not allowed');
+				}
+
 				user.createdBy = options.createdBy;
 				user.createdAt = new Date();
 			},
 			beforeUpdate: (user, options) => {
+
 				if (!options.updatedBy) {
 					throw new ValidationError('updatedBy is required');
 				}
+
+				if (typeof(options.updatedBy) !== 'number') {
+					throw new ValidationError('updatedBy must be a number');
+				}
+
+				if(options.updatedAt) {
+					throw new ValidationError('updatedAt is not allowed');
+				}
+
 				user.updatedBy = options.updatedBy;
 				user.updatedAt = new Date();
 			},
 			beforeDestroy: (user, options) => {
-				if (!options.deletedBy) {
-					throw new ValidationError('deletedBy is required');
+
+				if (options.force !== true) {
+
+					if (!options.deletedBy) {
+						throw new ValidationError('deletedBy is required');
+					}
+	
+					if (typeof(options.deletedBy) !== 'number') {
+						throw new ValidationError('deletedBy must be a number');
+					}
+					
 				}
-				user.deletedBy = options.createdBy;
+				
+				if(options.deletedAt) {
+					throw new ValidationError('deletedAt is not allowed');
+				}
+
+				user.deletedBy = options.deletedBy;
 			}
 		},
 		sequelize,

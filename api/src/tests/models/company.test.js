@@ -73,7 +73,7 @@ describe('Company Model Tests', () => {
 
 	});
 
-	test('isCompanyConstraintsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
+	test('isCompanyValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
 		expect(async () => {
 			await Company.create({ name: DataBuilder.randomString(256), code: DataBuilder.randomString(17), idApiKey: testApiKey.idApiKey });
@@ -81,7 +81,7 @@ describe('Company Model Tests', () => {
         
 	});
 
-	test('isCompanyConstraintsNotNull_BeingNull_ThrowingException', async () => {
+	test('isCompanyValidationsNotNull_BeingNull_ThrowingException', async () => {
 
 		expect(async () => {
 			await Company.create({});
@@ -89,7 +89,7 @@ describe('Company Model Tests', () => {
         
 	});
 
-	test('isCompanyConstraintsNotEmpty_BeingEmpty_ThrowingException', async () => {
+	test('isCompanyValidationsNotEmpty_BeingEmpty_ThrowingException', async () => {
 
 		expect(async () => {
 			await Company.create({ name: '', code: '', idApiKey: testApiKey.idApiKey });
@@ -97,7 +97,7 @@ describe('Company Model Tests', () => {
         
 	});
 
-	test('isCompanyIdApiKeyConstraintIsInteger_BeingNotInteger_ThrowingException', async () => {
+	test('isCompanyIdApiKeyValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		expect(async () => {
 			await Company.create({ name: DataBuilder.randomString(), code: DataBuilder.randomString(16), idApiKey: DataBuilder.randomString(2) });
@@ -105,7 +105,7 @@ describe('Company Model Tests', () => {
         
 	});
 
-	test('isCompanyConstraintsUnique_BeingNotUnique_ThrowingException', async () => {
+	test('isCompanyValidationsUnique_BeingNotUnique_ThrowingException', async () => {
 
 		expect(async () => {
 
@@ -135,18 +135,18 @@ describe('Company Model Tests', () => {
 
 	test('isCompanyIdApiKeyForeignKey_PerformingEagerAssociation_True', async () => {
 
-		const companyBeforeInsert = await Company.create({ name: DataBuilder.randomString(), code: DataBuilder.randomString(16), idApiKey: testApiKey.idApiKey });
+		const company = await Company.create({ name: DataBuilder.randomString(), code: DataBuilder.randomString(16), idApiKey: testApiKey.idApiKey });
 
-		const companyAfterInsert = await Company.findByPk(companyBeforeInsert.idCompany, { include: ['apiKey'] });
+		const apiKey = (await Company.findByPk(company.idCompany, { include: ['apiKey'] })).apiKey;
 
-		expect(companyAfterInsert.apiKey).not.toBeNull();
+		expect(apiKey).not.toBeNull();
 
-		expect(companyAfterInsert.apiKey).toEqual(expect.objectContaining({
+		expect(apiKey).toEqual(expect.objectContaining({
 			idApiKey: expect.any(Number),
-			key: expect.any(String),
+			key: expect.any(String)
 		}));
 
-		await companyAfterInsert.destroy();
+		await company.destroy();
         
 	});
 
