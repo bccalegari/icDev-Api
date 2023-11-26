@@ -1,9 +1,9 @@
 const { describe, test, expect } = require('@jest/globals');
-const DataBuilder = require('../utils/DataBuilder');
+const DataBuilder = require('../../utils/DataBuilder');
 
-const ApiKey = require('../../models/').apiKey;
+const ApiKey = require('../../../models/').apiKey;
 
-describe('ApiKey Model Tests', () => {
+describe('ApiKey Model Unit Tests', () => {
 
 	test('isApiKey_BeingSelected_True', async () => {
 

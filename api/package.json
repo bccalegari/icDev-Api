@@ -6,13 +6,20 @@
   "scripts": {
     "lint": "eslint --fix .",
     "dev": "npm install && nodemon server.js",
-    "test": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand",
-    "test:coverage": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --coverage",
+    "tests": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand",
+    "tests:coverage": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --coverage",
+    "tests:unit": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /unit",
+    "tests:unit:models": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /unit/models",
+    "tests:unit:services": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /unit/services",
+    "tests:integration": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /integration",
     "start": "node server.js"
   },
   "jest": {
     "verbose": true,
-    "setupFilesAfterEnv": ["jest-extended/all", "./src/tests/config/setupJest.js"]
+    "setupFilesAfterEnv": [
+      "jest-extended/all",
+      "./src/tests/config/setupJest.js"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -28,6 +35,8 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
     "eslint": "^8.50.0",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",

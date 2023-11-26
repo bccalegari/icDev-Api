@@ -1,9 +1,9 @@
 const { describe, test, expect } = require('@jest/globals');
-const DataBuilder = require('../utils/DataBuilder');
+const DataBuilder = require('../../utils/DataBuilder');
 
-const State = require('../../models').state;
+const State = require('../../../models').state;
 
-describe('State Model Tests', () => {
+describe('State Model Unit Tests', () => {
 
 	test('isState_BeingSelected_True', async () => {
 

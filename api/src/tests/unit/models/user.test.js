@@ -1,9 +1,9 @@
 const { describe, test, expect } = require('@jest/globals');
-const DataBuilder = require('../utils/DataBuilder');
+const DataBuilder = require('../../utils/DataBuilder');
 
-const User = require('../../models').user;
+const User = require('../../../models').user;
 
-describe('User Model Tests', () => {
+describe('User Model Unit Tests', () => {
 
 	test('isUser_BeingSelected_True', async () => {
 

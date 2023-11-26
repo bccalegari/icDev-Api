@@ -50,7 +50,7 @@ class AuthService {
 	 * Performs user authentication to register
 	 * @param { String } companyCode company code
 	 * @returns { Promise <String> } jwt register token
-	 * @throws { ApiError<404> | ApiError<400>  } If company is not found or company code is invalid
+	 * @throws { ApiError<404>  } If company is not found
 	 */
 	async authenticateForRegister(companyCode) {
 

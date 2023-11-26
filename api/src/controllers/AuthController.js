@@ -23,7 +23,7 @@ class AuthController {
 
 			const registerToken = await authService.authenticateForRegister(companyCode);
 
-			res.status(200).send(registerToken);
+			res.status(200).send({registerToken});
 
 		} catch (error) {
 

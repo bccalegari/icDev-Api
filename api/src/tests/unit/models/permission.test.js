@@ -1,9 +1,9 @@
 const { describe, test, expect } = require('@jest/globals');
-const DataBuilder = require('../utils/DataBuilder');
+const DataBuilder = require('../../utils/DataBuilder');
 
-const Permission = require('../../models').permission;
+const Permission = require('../../../models').permission;
 
-describe('Permission Model Tests', () => {
+describe('Permission Model Unit Tests', () => {
 
 	test('isPermission_BeingSelected_True', async () => {
 

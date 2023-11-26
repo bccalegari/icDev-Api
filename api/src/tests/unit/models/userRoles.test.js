@@ -1,11 +1,11 @@
 const { describe, test, expect, beforeAll, afterAll } = require('@jest/globals');
-const DataBuilder = require('../utils/DataBuilder');
+const DataBuilder = require('../../utils/DataBuilder');
 
-const UserRoles = require('../../models').userRoles;
-const User = require('../../models').user;
-const Role = require('../../models').role;
+const UserRoles = require('../../../models').userRoles;
+const User = require('../../../models').user;
+const Role = require('../../../models').role;
 
-describe('UserRoles Model Tests', () => {
+describe('UserRoles Model Unit Tests', () => {
 
 	let testUser;
 	let testRole;
