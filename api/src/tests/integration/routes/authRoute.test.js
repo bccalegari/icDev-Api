@@ -8,9 +8,9 @@ const app = require('../../../app');
 const Company = require('../../../models/index').company;
 const DataBuilder = require('../../utils/DataBuilder');
 
-describe('Auth Route Integration Tests', () => {
+describe('POST on /auth/signupAuth', () => {
 
-	test('POST on /auth/signupAuth being valid must return a register token', async () => {
+	test('signupAuth_ReturningRegisterToken_True', async () => {
 
 		const company = await Company.findByPk(1);
 
@@ -31,7 +31,45 @@ describe('Auth Route Integration Tests', () => {
 
 	});
 
-	test('POST on /auth/signupAuth being invalid must return an 404 error', async () => {
+	test('signupAuth_CompanyCodeNull_ThrowingBadRequestApiErrorException', async () => {
+
+		const response = await chai.request(app)
+			.post('/auth/signupAuth')
+			.set('Accept', 'application/json')
+			.send({});
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(400);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			message: 'Company code is required',
+		}));
+
+	});
+
+	test('signupAuth_CompanyCodeDifferentFromTheExactLength_ThrowingBadRequestApiErrorException', async () => {
+
+		const response = await chai.request(app)
+			.post('/auth/signupAuth')
+			.set('Accept', 'application/json')
+			.send({ companyCode: DataBuilder.randomString(17) });
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(400);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			message: 'Company code must be 16 characters long'
+		}));
+
+	});
+
+	test('signupAuth_CompanyCodeNotFound_ThrowingNotFoundApiErrorException', async () => {
 
 		const response = await chai.request(app)
 			.post('/auth/signupAuth')
@@ -45,7 +83,7 @@ describe('Auth Route Integration Tests', () => {
 		expect(response.statusCode).toBe(404);
 
 		expect(response.body).toEqual(expect.objectContaining({
-			message: expect.any(String),
+			message: 'Invalid company code',
 		}));
 
 	});

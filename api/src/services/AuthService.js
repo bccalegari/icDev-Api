@@ -54,6 +54,14 @@ class AuthService {
 	 */
 	async authenticateForRegister(companyCode) {
 
+		if (!companyCode) {
+			throw ApiError.badRequest('Company code is required');
+		} 
+
+		if (companyCode.length !== 16) {
+			throw ApiError.badRequest('Company code must be 16 characters long');
+		}
+
 		const company = await this.companyRepository.findCompanyByCode(companyCode);
 
 		if (!company) {
