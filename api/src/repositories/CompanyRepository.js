@@ -16,15 +16,21 @@ class CompanyRepository extends AbstractRepository {
 	}
 
 	/**
+	 * Find company by id
+	 * @param { String } id 
+	 * @returns { Promise<Model> }
+	 */
+	async findCompanyById(idCompany) {
+		return await super.getOneLazyElement({ idCompany});
+	}
+
+	/**
 	 * Find company by code
 	 * @param { String } code 
-	 * @returns { Model }
+	 * @returns { Promise<Model> }
 	 */
 	async findCompanyByCode(code) {
-
-		const company = await super.getOneLazyElement({ code: code });
-		return company;
-
+		return await super.getOneLazyElement({ code });
 	}
 
 }

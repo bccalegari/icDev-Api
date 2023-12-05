@@ -10,11 +10,7 @@ const config = require('../db/config/config')[env];
 const db = {};
 
 let sequelize;
-sequelize = new Sequelize(config.database, config.username, config.password, {
-	dialect: config.options.dialect,
-	host: config.options.host,
-	port: config.options.port
-});
+sequelize = new Sequelize(config.database, config.username, config.password, config.options);
 
 fs
 	.readdirSync(__dirname)

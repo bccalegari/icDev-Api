@@ -4,8 +4,8 @@ const chaiHttp = require('chai-http');
 
 chai.use(chaiHttp);
 
-const app = require('../../../app');
-const Company = require('../../../models/index').company;
+const app = require('../../../src/app');
+const Company = require('../../../src/models/index').company;
 const DataBuilder = require('../../utils/DataBuilder');
 
 describe('POST on /auth/signupAuth', () => {

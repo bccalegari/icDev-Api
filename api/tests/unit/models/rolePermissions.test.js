@@ -1,9 +1,9 @@
 const { describe, test, expect, afterAll, beforeAll } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const RolePermissions = require('../../../models').rolePermissions;
-const Role = require('../../../models').role;
-const Permission = require('../../../models').permission;
+const RolePermissions = require('../../../src/models').rolePermissions;
+const Role = require('../../../src/models').role;
+const Permission = require('../../../src/models').permission;
 
 describe('RolePermissions Model Unit Tests', () => {
 

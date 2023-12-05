@@ -21,29 +21,17 @@ class UserRepository extends AbstractRepository {
 	 * @returns { Model }
 	 */
 	async findUserByLogin(login) {
-		const user = await super.getOneEagerElement({login: login}, {model: this.getDatabaseModel('company'), include: 'apiKey'});
-		return user;
+		return await super.getOneEagerElement({ login }, [ { model: this.getDatabaseModel('company'), include: [ 'apiKey' ] } ]);
 	}
 	
+	/**
+	 * Create a user
+	 * @param { Object } user user data
+	 * @returns { Promise<Model> } user inserted
+	 * @throws { Error } If the insert goes wrong
+	 */
 	async createUser(user) {
-
-		const transaction = await this.createTransaction();
-
-		try {
-
-			const user = this.insertElement(user, transaction);
-		
-			await this.commitTransaction(transaction);
-			
-		} catch (error) {
-
-			await this.rollbackTransaction(transaction);
-			throw error; 
-			
-		}
-
-		return user;
-
+		return this.insertElement(user);
 	}
 
 }

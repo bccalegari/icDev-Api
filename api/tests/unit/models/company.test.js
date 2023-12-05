@@ -1,8 +1,8 @@
 const { describe, test, expect, afterAll, beforeAll } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const Company = require('../../../models').company;
-const ApiKey = require('../../../models').apiKey;
+const Company = require('../../../src/models').company;
+const ApiKey = require('../../../src/models').apiKey;
 
 describe('Company Model Unit Tests', () => {
 

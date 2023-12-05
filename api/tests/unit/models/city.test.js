@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const City = require('../../../models').city;
+const City = require('../../../src/models').city;
 
 describe('City Model Unit Tests', () => {
 

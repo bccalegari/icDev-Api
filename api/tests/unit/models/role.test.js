@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const Role = require('../../../models').role;
+const Role = require('../../../src/models').role;
 
 describe('Role Model Unit Tests', () => {
 

@@ -34,32 +34,6 @@ class AbstractRepository {
 	}
 
 	/**
-     * Create a transaction
-     * @returns { Transaction } transaction 
-     */
-	async createTransaction() {
-		return this.#db.sequelize.transaction();
-	}
-
-	/**
-     * Commit an transaction
-     * @param { Transaction } transaction 
-     * @returns { Promise<void> }
-     */
-	async commitTransaction(transaction) {
-		return transaction.commit();
-	}
-
-	/**
-     * Rollback an transaction
-     * @param { Transaction } transaction 
-     * @returns { Promise<void> }
-     */
-	async rollbackTransaction(transaction) {
-		return transaction.rollback();
-	}
-
-	/**
      * Get all elements (Lazy Loading)
      * @abstract
      * @param { Object } where 
@@ -102,23 +76,21 @@ class AbstractRepository {
 	/**
       * Insert an element
       * @param { Object } elementData 
-      * @param { Transaction } transaction 
       * @returns { Promise<Model> } element
-      * @throws { Error } If elementData is empty or transaction is not found
+      * @throws { Error } If elementData is empty or wrong and when transaction is not found
       */
-	async insertElement(elementData = {}, transaction) {
+	async insertElement(elementData = {}) {
 
 		if (!elementData) {
 			throw new Error('Empty element data');
 		}
 
-		if (!transaction) {
-			throw new Error('Transaction not found');
-		}
-
-		return await this.#db[this.model].create(elementData, { transaction: transaction });
-          
+		await this.#db.sequelize.transaction(async t => {
+			await this.#db[this.model].create(elementData, { transaction: t });
+		});
+        
 	}
+
 }
 
 module.exports = AbstractRepository;

@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const User = require('../../../models').user;
+const User = require('../../../src/models').user;
 
 describe('User Model Unit Tests', () => {
 

@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const ApiKey = require('../../../models/').apiKey;
+const ApiKey = require('../../../src/models').apiKey;
 
 describe('ApiKey Model Unit Tests', () => {
 

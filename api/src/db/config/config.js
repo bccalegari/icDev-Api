@@ -1,3 +1,5 @@
+const { logger } = require('../../utils/logger');
+
 module.exports = {
 	development: {
 		database: process.env.DB_NAME,
@@ -11,7 +13,7 @@ module.exports = {
 				freezeTableName: true,
 				timestamps: false
 			},
-			logging: console.log,
+			logging: msg => logger.trace(msg),
 			pool: {
 				max: 5,
 				min: 0,

@@ -1,7 +1,7 @@
 const { describe, test, expect } = require('@jest/globals');
 const DataBuilder = require('../../utils/DataBuilder');
 
-const Permission = require('../../../models').permission;
+const Permission = require('../../../src/models').permission;
 
 describe('Permission Model Unit Tests', () => {
 
