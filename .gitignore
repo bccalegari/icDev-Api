@@ -1,5 +1,7 @@
 .env
-/api/node_modules
 *.mwb*
-/api/coverage
-*.log
+api/node_modules
+api/coverage
+api/logs/*.log
+nginx/*.crt
+nginx/*.key
