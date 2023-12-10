@@ -4,6 +4,10 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
+	/**
+	 * Api Key Model
+	 * @extends Model
+	 */
 	class ApiKey extends Model {
 
 		static associate(models) {

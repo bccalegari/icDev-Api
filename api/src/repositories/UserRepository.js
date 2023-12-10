@@ -18,7 +18,7 @@ class UserRepository extends AbstractRepository {
 	/**
 	 * Find user by login
 	 * @param { String } login 
-	 * @returns { Model }
+	 * @returns { Promise<Model> }
 	 */
 	async findUserByLogin(login) {
 		return await super.getOneEagerElement({ login }, [ { model: this.getDatabaseModel('company'), include: [ 'apiKey' ] } ]);
@@ -27,11 +27,12 @@ class UserRepository extends AbstractRepository {
 	/**
 	 * Create a user
 	 * @param { Object } user user data
+	 * @param { Number } createdBy User id of the record creator, by default it is 1 (icDevRoot)
 	 * @returns { Promise<Model> } user inserted
 	 * @throws { Error } If the insert goes wrong
 	 */
-	async createUser(user) {
-		return this.insertElement(user);
+	async createUser(user, createdBy) {
+		return await this.insertElement(user, createdBy);
 	}
 
 }

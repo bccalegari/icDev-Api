@@ -4,6 +4,10 @@ const { Model, ValidationError } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
+	/**
+	 * User Model
+	 * @extends Model
+	 */
 	class User extends Model {
 
 		static associate(models) {

@@ -4,6 +4,10 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
+	/**
+	 * User Roles Model
+	 * @extends Model
+	 */
 	class UserRoles extends Model {
 
 		static associate(models) {

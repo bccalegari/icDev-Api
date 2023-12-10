@@ -45,9 +45,9 @@ class AuthController {
 
 		try {
 
-			user = await authService.register(user, companyId);
+			user = await authService.register(user, parseInt(companyId));
 
-			res.status(201).send({ user });
+			res.status(201).send(user);
 
 		} catch (error) {
 

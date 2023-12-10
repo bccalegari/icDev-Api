@@ -4,6 +4,7 @@ const { sign, verify } = require('jsonwebtoken');
 const ApiError = require('../errors/ApiError');
 const CompanyRepository = require('../repositories/CompanyRepository');
 const CityRepository = require('../repositories/CityRepository');
+const UserDTOFactory = require('../dtos/UserDTOFactory');
 const { ValidationError } = require('sequelize');
 const { logger } = require('../utils/logger');
 
@@ -18,7 +19,7 @@ class AuthService {
 	 * User Repository
      * @private
      * @constant
-     * @type { Object }
+     * @type { UserRepository }
      */
 	#userRepository;
 
@@ -26,7 +27,7 @@ class AuthService {
 	 * Company Repository
      * @private
      * @constant
-     * @type { Object }
+     * @type { CompanyRepository }
      */
 	#companyRepository;
 
@@ -34,9 +35,17 @@ class AuthService {
 	 * City Repository
      * @private
      * @constant
-     * @type { Object }
+     * @type { CityRepository }
      */
 	#cityRepository;
+
+	/**
+	 * User DTO Factory
+	 * @private
+	 * @constant
+	 * @type { UserDTOFactory }
+	 */
+	#userDTOFactory;
 
 	/**
      * Class constructor
@@ -47,6 +56,7 @@ class AuthService {
 		this.#userRepository = new UserRepository();
 		this.#companyRepository = new CompanyRepository();
 		this.#cityRepository = new CityRepository();
+		this.#userDTOFactory = new UserDTOFactory();
 	}
 
 	/**
@@ -159,7 +169,7 @@ class AuthService {
 	/**
 	 * Validates the register token
 	 * @param { String } registerToken 
-	 * @param { String } companyId
+	 * @param { Number } companyId
 	 * @returns { Promise<Boolean> } Is authenticated ?
 	 * @throws { ApiError<401> | ApiError<500> } If register token is invalid, company is not found or something goes wrong
 	 */
@@ -192,6 +202,7 @@ class AuthService {
 	/**
 	 * Perform user registration
 	 * @param { Object } user user data
+	 * @param { Number } companyId company id
 	 * @returns { Promise <Model> } user
 	 * @throws { ApiError<400> | ApiError<500> } If user data is invalid or registration fails
 	 */
@@ -201,37 +212,25 @@ class AuthService {
 		logger.trace(`[ Company id: ${companyId}, user data: ${JSON.stringify(user)} ]`);
 
 		try {
-
-			if (Object.keys(user).length === 0) {
-				throw ApiError.badRequest('User data is required');
-			} 
-			
-			if (!user.password) {
-				throw ApiError.badRequest('Password is required');
-			}
-
-			user.password = await bcrypt.hash(user.password, 10);
 	
-			if (!user.city) {
-				throw ApiError.badRequest('City name is required');
-			}
-	
-			const userCity = await this.#cityRepository.findCityByName(user.city);
+			const userCity = await this.#cityRepository.findCityByName(user.city ?? null);
 
-			if (!userCity) {
-				throw ApiError.badRequest('Invalid city name');
-			}
-	
-			user.idCity = userCity.idCity;
-	
-			user.companyId = companyId;
+			const userBeforeCreateDTO = this.#userDTOFactory.createUserBeforeSignUpDTO(user, userCity, companyId);
 
-			const newUser = await this.#userRepository.createUser(user);
+			userBeforeCreateDTO.password = await bcrypt.hash(userBeforeCreateDTO.password, 10);
+
+			const userAfterCreate = await this.#userRepository.createUser(userBeforeCreateDTO);
+
+			const userAfterCreateCity = await userAfterCreate.getCity();
+
+			const userAfterCreateCompany = await userAfterCreate.getCompany();
+
+			const userAfterCreateDTO = this.#userDTOFactory.createUserAfterSignUpDTO(userAfterCreate, userAfterCreateCity, userAfterCreateCompany);
 
 			logger.trace('=== User registered successfully ===');
-			logger.trace(`[ User id: ${newUser.idUser} ]`);
+			logger.trace(`[ User id: ${userAfterCreate.idUser} ]`);
 
-			return newUser;
+			return userAfterCreateDTO;
 
 		} catch (error) {
 

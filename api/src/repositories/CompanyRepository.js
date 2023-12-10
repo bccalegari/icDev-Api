@@ -21,7 +21,7 @@ class CompanyRepository extends AbstractRepository {
 	 * @returns { Promise<Model> }
 	 */
 	async findCompanyById(idCompany) {
-		return await super.getOneLazyElement({ idCompany});
+		return await super.getOneLazyElement({ idCompany });
 	}
 
 	/**

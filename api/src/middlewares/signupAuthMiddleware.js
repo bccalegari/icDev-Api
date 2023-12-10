@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
 
 		const authService = new AuthService();
 
-		await authService.validateRegisterToken(registerToken, companyId);
+		await authService.validateRegisterToken(registerToken, parseInt(companyId));
 
 		return next();
 
