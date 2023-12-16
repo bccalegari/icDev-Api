@@ -15,7 +15,7 @@ class AuthController {
 	 * @param { Promise<Request> } req 
 	 * @param { Promise<Response> } res 
 	 */
-	static async signupAuth(req, res) {
+	static async signUpAuth(req, res) {
 
 		const { companyCode } = req.body;
 
@@ -34,11 +34,11 @@ class AuthController {
 	}
 
 	/**
-	 * Register a authenticate user
+	 * Register a authenticated user
 	 * @param { Promise<Request> } req 
 	 * @param { Promise<Response> } res 
 	 */
-	static async signup(req, res) {
+	static async signUp(req, res) {
 
 		const companyId = req.params.companyId;
 		let user = req.body;
@@ -62,7 +62,7 @@ class AuthController {
 	 * @param { Promise<Request> } req 
 	 * @param { Promise<Response> } res 
 	 */
-	static async signin(req, res) {
+	static async signIn(req, res) {
 
 		const { login, password } = req.body;
 

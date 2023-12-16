@@ -7,16 +7,17 @@ chai.use(chaiHttp);
 const app = require('../../../src/app');
 const Company = require('../../../src/models/index').company;
 const ApiKey = require('../../../src/models/index').apiKey;
+const User = require('../../../src/models/index').user;
 const DataBuilder = require('../../utils/DataBuilder');
 
-describe('POST on /auth/signupAuth', () => {
+describe('POST on /v1/auth/signupAuth', () => {
 
-	test('signupAuth_ValidCompanyCode_ReturningRegisterToken', async () => {
+	test('signUpAuth_ValidCompanyCode_ReturningRegisterToken', async () => {
 
 		const company = await Company.findByPk(1);
 
 		const response = await chai.request(app)
-			.post('/auth/signupAuth')
+			.post('/v1/auth/signupAuth')
 			.set('Accept', 'application/json')
 			.send({ companyCode: company.code });
 
@@ -32,10 +33,10 @@ describe('POST on /auth/signupAuth', () => {
 
 	});
 
-	test('signupAuth_CompanyCodeNull_ThrowingBadRequestApiErrorException', async () => {
+	test('signUpAuth_CompanyCodeNull_ThrowingBadRequestApiErrorException', async () => {
 
 		const response = await chai.request(app)
-			.post('/auth/signupAuth')
+			.post('/v1/auth/signupAuth')
 			.set('Accept', 'application/json')
 			.send({});
 
@@ -51,10 +52,10 @@ describe('POST on /auth/signupAuth', () => {
 
 	});
 
-	test('signupAuth_CompanyCodeDifferentFromTheExactLength_ThrowingBadRequestApiErrorException', async () => {
+	test('signUpAuth_CompanyCodeDifferentFromTheExactLength_ThrowingBadRequestApiErrorException', async () => {
 
 		const response = await chai.request(app)
-			.post('/auth/signupAuth')
+			.post('/v1/auth/signupAuth')
 			.set('Accept', 'application/json')
 			.send({ companyCode: DataBuilder.randomString(17) });
 
@@ -70,10 +71,10 @@ describe('POST on /auth/signupAuth', () => {
 
 	});
 
-	test('signupAuth_CompanyCodeNotFound_ThrowingNotFoundApiErrorException', async () => {
+	test('signUpAuth_CompanyCodeNotFound_ThrowingNotFoundApiErrorException', async () => {
 
 		const response = await chai.request(app)
-			.post('/auth/signupAuth')
+			.post('/v1/auth/signupAuth')
 			.set('Accept', 'application/json')
 			.send({ companyCode: DataBuilder.randomString(16) });
 
@@ -91,7 +92,7 @@ describe('POST on /auth/signupAuth', () => {
 
 });
 
-describe('POST on /auth/signup/:companyId', () => {
+describe('POST on /v1/auth/signup/:companyId', () => {
 
 	describe('signupAuthMiddleware', () => {
 
@@ -100,7 +101,7 @@ describe('POST on /auth/signup/:companyId', () => {
 			const company = await Company.findByPk(1);
 		
 			const response = await chai.request(app)
-				.post(`/auth/signup/${company.idCompany}`)
+				.post(`/v1/auth/signup/${company.idCompany}`)
 				.set('Accept', 'application/json')
 				.send({});
 		
@@ -121,7 +122,7 @@ describe('POST on /auth/signup/:companyId', () => {
 			const company = await Company.findByPk(1);
 		
 			const response = await chai.request(app)
-				.post(`/auth/signup/${company.idCompany}`)
+				.post(`/v1/auth/signup/${company.idCompany}`)
 				.set('Accept', 'application/json')
 				.set('Authorization', `registerToken ${DataBuilder.randomString()}`)
 				.send({});
@@ -141,7 +142,7 @@ describe('POST on /auth/signup/:companyId', () => {
 		test('signupAuthMiddleware_CompanyCodeNotFound_ThrowingUnauthorizedApiErrorException', async () => {
 		
 			const response = await chai.request(app)
-				.post(`/auth/signup/${DataBuilder.randomInteger(2)}`)
+				.post(`/v1/auth/signup/${DataBuilder.randomInteger(2)}`)
 				.set('Accept', 'application/json')
 				.set('Authorization', `registerToken ${DataBuilder.randomString()}`)
 				.send({});
@@ -163,7 +164,7 @@ describe('POST on /auth/signup/:companyId', () => {
 			const registerTokenCompany = await Company.findByPk(1);
 	
 			const registerToken = await chai.request(app)
-				.post('/auth/signupAuth')
+				.post('/v1/auth/signupAuth')
 				.set('Accept', 'application/json')
 				.send({ companyCode: registerTokenCompany.code });
 	
@@ -172,7 +173,7 @@ describe('POST on /auth/signup/:companyId', () => {
 			const requestCompany = await Company.create({ name: DataBuilder.randomString(), code: DataBuilder.randomString(16), idApiKey: apiKey.idApiKey });
 		
 			const response = await chai.request(app)
-				.post(`/auth/signup/${requestCompany.idCompany}`)
+				.post(`/v1/auth/signup/${requestCompany.idCompany}`)
 				.set('Accept', 'application/json')
 				.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 				.send({});
@@ -198,13 +199,13 @@ describe('POST on /auth/signup/:companyId', () => {
 		const company = await Company.findByPk(1);
 
 		registerToken = await chai.request(app)
-			.post('/auth/signupAuth')
+			.post('/v1/auth/signupAuth')
 			.set('Accept', 'application/json')
 			.send({ companyCode: company.code });
 		
 	});
 
-	test('signup_ValidCompanyIdAndValidUserData_ReturningUserCreated', async () => {
+	test('signUp_ValidCompanyIdAndValidUserData_ReturningUserCreated', async () => {
 
 		const company = await Company.findByPk(1);
 
@@ -224,7 +225,7 @@ describe('POST on /auth/signup/:companyId', () => {
 		};
 
 		const response = await chai.request(app)
-			.post(`/auth/signup/${company.idCompany}`)
+			.post(`/v1/auth/signup/${company.idCompany}`)
 			.set('Accept', 'application/json')
 			.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 			.send(userToBeCreated);
@@ -253,12 +254,12 @@ describe('POST on /auth/signup/:companyId', () => {
 	
 	});
 
-	test('signup_UserDataNull_ThrowingBadRequestApiErrorException', async () => {
+	test('signUp_UserDataNull_ThrowingBadRequestApiErrorException', async () => {
 
 		const company = await Company.findByPk(1);
 
 		const response = await chai.request(app)
-			.post(`/auth/signup/${company.idCompany}`)
+			.post(`/v1/auth/signup/${company.idCompany}`)
 			.set('Accept', 'application/json')
 			.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 			.send({});
@@ -275,7 +276,7 @@ describe('POST on /auth/signup/:companyId', () => {
 
 	});
 
-	test('signup_PasswordNull_ThrowingBadRequestApiErrorException', async () => {
+	test('signUp_PasswordNull_ThrowingBadRequestApiErrorException', async () => {
 
 		const company = await Company.findByPk(1);
 
@@ -294,7 +295,7 @@ describe('POST on /auth/signup/:companyId', () => {
 		};
 
 		const response = await chai.request(app)
-			.post(`/auth/signup/${company.idCompany}`)
+			.post(`/v1/auth/signup/${company.idCompany}`)
 			.set('Accept', 'application/json')
 			.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 			.send(userToBeCreated);
@@ -311,7 +312,7 @@ describe('POST on /auth/signup/:companyId', () => {
 
 	});
 
-	test('signup_CityNull_ThrowingBadRequestApiErrorException', async () => {
+	test('signUp_CityNull_ThrowingBadRequestApiErrorException', async () => {
 
 		const company = await Company.findByPk(1);
 
@@ -330,7 +331,7 @@ describe('POST on /auth/signup/:companyId', () => {
 		};
 
 		const response = await chai.request(app)
-			.post(`/auth/signup/${company.idCompany}`)
+			.post(`/v1/auth/signup/${company.idCompany}`)
 			.set('Accept', 'application/json')
 			.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 			.send(userToBeCreated);
@@ -347,7 +348,7 @@ describe('POST on /auth/signup/:companyId', () => {
 
 	});
 
-	test('signup_CityInvalid_ThrowingBadRequestApiErrorException', async () => {
+	test('signUp_CityInvalid_ThrowingBadRequestApiErrorException', async () => {
 
 		const company = await Company.findByPk(1);
 
@@ -367,7 +368,7 @@ describe('POST on /auth/signup/:companyId', () => {
 		};
 
 		const response = await chai.request(app)
-			.post(`/auth/signup/${company.idCompany}`)
+			.post(`/v1/auth/signup/${company.idCompany}`)
 			.set('Accept', 'application/json')
 			.set('Authorization', `registerToken ${registerToken.body.registerToken}`)
 			.send(userToBeCreated);
@@ -380,6 +381,90 @@ describe('POST on /auth/signup/:companyId', () => {
 
 		expect(response.body).toEqual(expect.objectContaining({
 			message: 'Invalid city name',
+		}));
+
+	});
+
+});
+
+describe('POST on /v1/auth/signin', () => {
+
+	test('signIn_ValidLoginAndPassword_ReturningAccessToken', async () => {
+
+		const user = await User.findByPk(1);
+
+		const response = await chai.request(app)
+			.post('/v1/auth/signin')
+			.set('Accept', 'application/json')
+			.send({ login: user.login, password: '123' });
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(200);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			accessToken: expect.any(String),
+		}));
+
+	});
+
+	test('signIn_LoginOrPasswordNull_ThrowingBadRequestApiErrorException', async () => {
+
+		const response = await chai.request(app)
+			.post('/v1/auth/signin')
+			.set('Accept', 'application/json')
+			.send({});
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(400);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			message: 'Login and password are required',
+		}));
+
+	});
+
+	test('signIn_LoginNotFound_ThrowingNotFoundApiErrorException', async () => {
+
+		const response = await chai.request(app)
+			.post('/v1/auth/signin')
+			.set('Accept', 'application/json')
+			.send({ login: DataBuilder.randomString(20), password: DataBuilder.randomString(20) });
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(404);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			message: 'User not found',
+		}));
+
+	});
+
+	test('signIn_PasswordInvalid_ThrowingUnauthorizedApiErrorException', async () => {
+		
+		const user = await User.findByPk(1);
+
+		const response = await chai.request(app)
+			.post('/v1/auth/signin')
+			.set('Accept', 'application/json')
+			.send({ login: user.login, password: DataBuilder.randomString(20) });
+
+		expect(response).toBeDefined();
+
+		expect(response).not.toBeNull();
+
+		expect(response.statusCode).toBe(401);
+
+		expect(response.body).toEqual(expect.objectContaining({
+			message: 'Invalid login or password',
 		}));
 
 	});

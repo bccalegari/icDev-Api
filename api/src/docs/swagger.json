@@ -1,0 +1,395 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "icDev-Api",
+        "description": "Inventory Management API",
+        "contact": {
+            "email": "icdevroot@icdev.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:8080/v1",
+            "description": ""
+        }
+    ],
+    "paths": {
+        "/auth/signupAuth": {
+            "post": {
+                "summary": "Authenticates a user to register",
+                "description": "Returns a register token to use in sign up",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/companyCode"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/registerToken"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup/:companyId": {
+            "post": {
+                "summary": "Register a authenticated user",
+                "description": "Returns user data after sign up",
+                "parameters": [ 
+                    {
+                        "in": "path",
+                        "name": "companyid",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "Same company where you used the code in the authentication route for registration"
+                    }
+                ],
+                "tags": ["Auth"],
+                "security": [ { "registerToken": [] } ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/userDataSignUpRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/userDataSignUpResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "summary": "Authenticates a user to use api",
+                "description": "Returns a access token to use in api routes",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/userDataSignInRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/registerToken"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "responseMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "Response message",
+                    "required": true
+                }
+            }
+        },
+        "companyCode": {
+            "type": "object",
+            "properties": {
+                "companyCode": {
+                    "type": "string",
+                    "size": 16,
+                    "required": true
+                }
+            }
+        },
+        "registerToken": {
+            "type": "object",
+            "properties": {
+                "registerToken": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        },
+        "userDataSignUpRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "size": 50,
+                    "required": true
+                },
+                "lastName": {
+                    "type": "string",
+                    "size": 50,
+                    "required": true
+                },
+                "login": {
+                    "type": "string",
+                    "size": 30,
+                    "required": true
+                },
+                "password": {
+                    "type": "string",
+                    "required": true
+                },
+                "cpf": {
+                    "type": "string",
+                    "size": 11,
+                    "required": true
+                },
+                "street": {
+                    "type": "string",
+                    "size": 150,
+                    "required": true
+                },
+                "streetNumber": {
+                    "type": "integer",
+                    "required": true
+                },
+                "district": {
+                    "type": "string",
+                    "size": 150,
+                    "required": true
+                },
+                "birthDate": {
+                    "type": "string",
+                    "example": "YYYY-MM-DD",
+                    "required": true
+                },
+                "phone": {
+                    "type": "string",
+                    "size": 14,
+                    "required": true
+                },
+                "email": {
+                    "type": "string",
+                    "size": 255,
+                    "required": true
+                },
+                "city": {
+                    "type": "string",
+                    "description": "Only accepts cities in Brazil and the United States",
+                    "required": true
+                }
+            }
+        },
+        "userDataSignUpResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "size": 50,
+                    "required": true
+                },
+                "lastName": {
+                    "type": "string",
+                    "size": 50,
+                    "required": true
+                },
+                "login": {
+                    "type": "string",
+                    "size": 30,
+                    "required": true
+                },
+                "cpf": {
+                    "type": "string",
+                    "size": 11,
+                    "required": true
+                },
+                "street": {
+                    "type": "string",
+                    "size": 150,
+                    "required": true
+                },
+                "streetNumber": {
+                    "type": "integer",
+                    "required": true
+                },
+                "district": {
+                    "type": "string",
+                    "size": 150,
+                    "required": true
+                },
+                "complement": {
+                    "type": "string",
+                    "size": 255,
+                    "required": false
+                },
+                "city": {
+                    "type": "string",
+                    "required": true
+                },
+                "birthDate": {
+                    "type": "string",
+                    "example": "YYYY-MM-DD",
+                    "required": true
+                },
+                "phone": {
+                    "type": "string",
+                    "size": 14,
+                    "required": true
+                },
+                "email": {
+                    "type": "string",
+                    "size": 255,
+                    "required": true
+                },
+                "company": {
+                    "type": "string",
+                    "required": true
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "YYYY-MM-DDTHH:mm:ss.sssZ",
+                    "required": true
+                }
+            }
+        },
+        "userDataSignInRequest": {
+            "type": "object",
+            "properties": {
+                "login": {
+                    "type": "string",
+                    "size": 30,
+                    "required": true
+                },
+                "password": {
+                    "type": "string",
+                    "required": true
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "registerToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "fdsfds"
+            }
+        }
+    }
+}

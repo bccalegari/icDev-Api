@@ -1,9 +1,9 @@
 /**
- * User Before Sign Up DTO
+ * User Sign Up Response DTO
  * 
- * Represents an user data to be used for registration
+ * Represents an user data to be returned after registration
  */
-class UserBeforeSignUpDTO {
+class UserSignUpResponseDTO {
     
 	/**
      * User name
@@ -22,12 +22,6 @@ class UserBeforeSignUpDTO {
      * @type { String }
      */
 	login;
-
-	/**
-     * User password
-     * @type { String }
-     */
-	password;
 
 	/**
      * User cpf
@@ -54,6 +48,18 @@ class UserBeforeSignUpDTO {
 	district;
 
 	/**
+     * User complement
+     * @type { String }
+     */
+	complement;
+
+	/**
+     * User city
+     * @type { String }
+     */
+	city;
+
+	/**
      * User birth date
      * @type { String }
      */
@@ -72,37 +78,38 @@ class UserBeforeSignUpDTO {
 	email;
 
 	/**
-     * User city id
-     * @type { Number }
+     * User company
+     * @type { String }
      */
-	idCity;
+	company;
 
 	/**
-     * User company id
-     * @type { Number }
+     * User created date
+     * @type { String }
      */
-	idCompany;
+	createdAt;
 
 	/**
      * Class constructor
      * @param { Model } user 
      */
-	constructor(name, lastName, login, password, cpf, street, streetNumber, district, birthDate, phone, email, idCity, idCompany) {
+	constructor(name, lastName, login, cpf, street, streetNumber, district, complement=null, city, birthDate, phone, email, company, createdAt) {
 		this.name = name;
 		this.lastName = lastName;
 		this.login = login;
-		this.password = password;
 		this.cpf = cpf;
 		this.street = street;
 		this.streetNumber = streetNumber;
 		this.district = district; 
+		this.complement = complement;
+		this.city = city;
 		this.birthDate = birthDate;
 		this.phone = phone;
 		this.email = email;
-		this.idCity = idCity;
-		this.idCompany = idCompany;
+		this.company = company;
+		this.createdAt = createdAt;
 	}
 
 }
 
-module.exports = UserBeforeSignUpDTO;
+module.exports = UserSignUpResponseDTO;

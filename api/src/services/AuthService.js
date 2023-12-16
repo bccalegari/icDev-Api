@@ -5,7 +5,6 @@ const ApiError = require('../errors/ApiError');
 const CompanyRepository = require('../repositories/CompanyRepository');
 const CityRepository = require('../repositories/CityRepository');
 const UserDTOFactory = require('../dtos/UserDTOFactory');
-const { ValidationError } = require('sequelize');
 const { logger } = require('../utils/logger');
 
 /**
@@ -74,11 +73,9 @@ class AuthService {
 
 		try {
 
-			if (!login || !password) {
-				throw ApiError.badRequest('Login and password are required');
-			}
+			const userSignInRequestDTO = this.#userDTOFactory.createUserSignInRequestDTO(login, password);
 	
-			const user = await this.#userRepository.findUserByLogin(login);
+			const user = await this.#userRepository.findUserByLogin(userSignInRequestDTO.login);
 	
 			if (!user) {
 				throw ApiError.notFound('User not found');
@@ -99,15 +96,7 @@ class AuthService {
 
 			logger.error(error);
 
-			if (error instanceof ValidationError) {
-				throw ApiError.badRequest(error.message);
-			}
-
-			if (!(error instanceof ApiError)) {
-				throw ApiError.internalServerError();
-			}
-
-			throw error;
+			ApiError.handleError(error);
 
 		}
 
@@ -152,15 +141,7 @@ class AuthService {
 
 			logger.error(error);
 
-			if (error instanceof ValidationError) {
-				throw ApiError.badRequest(error.message);
-			}
-
-			if (!(error instanceof ApiError)) {
-				throw ApiError.internalServerError();
-			}
-
-			throw error;
+			ApiError.handleError(error);
 
 		}
 		
@@ -215,36 +196,28 @@ class AuthService {
 	
 			const userCity = await this.#cityRepository.findCityByName(user.city ?? null);
 
-			const userBeforeCreateDTO = this.#userDTOFactory.createUserBeforeSignUpDTO(user, userCity, companyId);
+			const userSignUpRequestDTO = this.#userDTOFactory.createUserSignUpRequestDTO(user, userCity, companyId);
 
-			userBeforeCreateDTO.password = await bcrypt.hash(userBeforeCreateDTO.password, 10);
+			userSignUpRequestDTO.password = await bcrypt.hash(userSignUpRequestDTO.password, 10);
 
-			const userAfterCreate = await this.#userRepository.createUser(userBeforeCreateDTO);
+			const newUser = await this.#userRepository.createUser(userSignUpRequestDTO);
 
-			const userAfterCreateCity = await userAfterCreate.getCity();
+			const newUserCity = await newUser.getCity();
 
-			const userAfterCreateCompany = await userAfterCreate.getCompany();
+			const newUserCompany = await newUser.getCompany();
 
-			const userAfterCreateDTO = this.#userDTOFactory.createUserAfterSignUpDTO(userAfterCreate, userAfterCreateCity, userAfterCreateCompany);
+			const userSignUpResponseDTO = this.#userDTOFactory.createUserSignUpResponseDTO(newUser, newUserCity, newUserCompany);
 
 			logger.trace('=== User registered successfully ===');
-			logger.trace(`[ User id: ${userAfterCreate.idUser} ]`);
+			logger.trace(`[ User id: ${newUser.idUser} ]`);
 
-			return userAfterCreateDTO;
+			return userSignUpResponseDTO;
 
 		} catch (error) {
 
 			logger.error(error);
 
-			if (error instanceof ValidationError) {
-				throw ApiError.badRequest(error.message);
-			}
-
-			if (!(error instanceof ApiError)) {
-				throw ApiError.internalServerError();
-			}
-
-			throw error;
+			ApiError.handleError(error);
 
 		}
 

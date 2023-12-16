@@ -1,3 +1,4 @@
+const { ValidationError } = require('sequelize');
 
 /**
  * Api Error Class
@@ -70,6 +71,26 @@ class ApiError extends Error {
 	 */
 	static internalServerError(message='Internal Server Error') {
 		return new ApiError(500, message);
+	}
+
+	/**
+	 * Handles errors to return to the controller
+	 * @param { Error } error 
+	 * @throws { ApiError<400> | ApiError<401> | ApiError<403> | ApiError<404> | ApiError<500> } If error is not an instance of ApiError
+	 * @throws { ApiError<400> } If error is an instance of ValidationError
+	 * @throws { ApiError<500> } If error is not an instance of ApiError or ValidationError
+	 */
+	static handleError(error) {
+
+		if (error instanceof ApiError) {
+			throw error;
+		}
+
+		if (error instanceof ValidationError) {
+			throw ApiError.badRequest(error.message);
+		}
+
+		throw ApiError.internalServerError();
 	}
 
 }

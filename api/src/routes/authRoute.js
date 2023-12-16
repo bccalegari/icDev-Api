@@ -5,8 +5,8 @@ const signupAuthMiddleware = require('../middlewares/signupAuthMiddleware');
 const router = Router();
 
 router
-	.post('/auth/signupAuth', AuthController.signupAuth)
-	.post('/auth/signup/:companyId', signupAuthMiddleware, AuthController.signup)
-	.post('/auth/signin', AuthController.signin);
+	.post('/auth/signupAuth', AuthController.signUpAuth)
+	.post('/auth/signup/:companyId', signupAuthMiddleware, AuthController.signUp)
+	.post('/auth/signin', AuthController.signIn);
 
 module.exports = router;
