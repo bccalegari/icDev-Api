@@ -6,14 +6,14 @@ const authService = new AuthService();
  * Auth Controller class
  * 
  * Handles user authentication
+ * @category Controllers
  */
 class AuthController {
 
-
 	/**
 	 * Authenticates a user to register
-	 * @param { Promise<Request> } req 
-	 * @param { Promise<Response> } res 
+	 * @param { Promise<Request> } req request
+	 * @param { Promise<Response> } res response
 	 */
 	static async signUpAuth(req, res) {
 
@@ -35,17 +35,16 @@ class AuthController {
 
 	/**
 	 * Register a authenticated user
-	 * @param { Promise<Request> } req 
-	 * @param { Promise<Response> } res 
+	 * @param { Promise<Request> } req request
+	 * @param { Promise<Response> } res response
 	 */
 	static async signUp(req, res) {
 
-		const companyId = req.params.companyId;
 		let user = req.body;
 
 		try {
 
-			user = await authService.register(user, parseInt(companyId));
+			user = await authService.register(user, parseInt(req.headers['company-id']));
 
 			res.status(201).send(user);
 
@@ -59,8 +58,8 @@ class AuthController {
 
 	/**
 	 * Authenticates a user to use api
-	 * @param { Promise<Request> } req 
-	 * @param { Promise<Response> } res 
+	 * @param { Promise<Request> } req request
+	 * @param { Promise<Response> } res response
 	 */
 	static async signIn(req, res) {
 

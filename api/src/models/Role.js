@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	/**
 	 * Role Model
+	 * @category Models
 	 * @extends Model
 	 */
 	class Role extends Model {

@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	/**
 	 * State Model
+	 * @category Models
 	 * @extends Model
 	 */
 	class State extends Model {

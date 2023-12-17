@@ -641,16 +641,20 @@ INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumb
   VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', '11111111111', 'icDev Street', 777, 'icDev District', '1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
 
 -- -----------------------------------------------------
--- Table permission
--- -----------------------------------------------------
-
-INSERT INTO permission (`name`, `description`) VALUES ('Root', 'Full permission');
-
--- -----------------------------------------------------
 -- Table role
 -- -----------------------------------------------------
 
-INSERT INTO role (`name`, `description`) VALUES ('Root', 'Root user, has full permission');
+INSERT INTO role (`name`, `description`) VALUES ('Master', 'Master user, has full permission');
+
+-- -----------------------------------------------------
+-- Table permission
+-- -----------------------------------------------------
+
+INSERT INTO permission (`name`, `description`) VALUES ('Master', 'Full permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Create', 'Create permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Read', 'Read permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Update', 'Update permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Delete', 'Delete');
 
 -- -----------------------------------------------------
 -- Table rolePermissions
@@ -663,3 +667,15 @@ INSERT INTO rolePermissions (idRole, idPermission) VALUES (1, 1);
 -- -----------------------------------------------------
 
 INSERT INTO userRoles (idUser, idRole) VALUES (1, 1);
+
+-- -----------------------------------------------------
+-- Table unitType
+-- -----------------------------------------------------
+
+INSERT INTO unitType (`name`) VALUES ('Supplier'), ('Shipping'), ('Stock');
+
+-- -----------------------------------------------------
+-- Table transactionType
+-- -----------------------------------------------------
+
+INSERT INTO transactionType (`name`) VALUES ('Input'), ('Output');

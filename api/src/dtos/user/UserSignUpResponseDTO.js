@@ -91,7 +91,20 @@ class UserSignUpResponseDTO {
 
 	/**
      * Class constructor
-     * @param { Model } user 
+     * @param { String } name user name
+     * @param { String } lastName user last name
+     * @param { String } login user login
+     * @param { String } cpf user cpf
+     * @param { String } street user street
+     * @param { Number } streetNumber user street number
+     * @param { String } district user district
+     * @param { String } complement user complement
+     * @param { String } city user city
+     * @param { String } birthDate user birth date
+     * @param { String } phone user phone
+     * @param { String } email user email
+     * @param { String } company user company
+     * @param { String } createdAt user created date
      */
 	constructor(name, lastName, login, cpf, street, streetNumber, district, complement=null, city, birthDate, phone, email, company, createdAt) {
 		this.name = name;

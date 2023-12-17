@@ -91,7 +91,20 @@ class UserSignUpRequestDTO {
 
 	/**
      * Class constructor
-     * @param { Model } user 
+     * @param { String } name user name
+     * @param { String } lastName user last name
+     * @param { String } login user login
+     * @param { String } password user password
+     * @param { String } cpf user cpf
+     * @param { String } street user street
+     * @param { Number } streetNumber user street number
+     * @param { String } district user district
+     * @param { String } complement user complement
+     * @param { String } birthDate user birth date
+     * @param { String } phone user phone
+     * @param { String } email user email
+     * @param { Number } idCity user city id
+     * @param { Number } idCompany user company id
      */
 	constructor(name, lastName, login, password, cpf, street, streetNumber, district, complement, birthDate, phone, email, idCity, idCompany) {
 		this.name = name;

@@ -2,11 +2,20 @@ const ApiError = require('../errors/ApiError');
 const AuthService = require('../services/AuthService');
 const { logger } = require('../utils/logger');
 
+/**
+ * Checks whether the user is affiliated with any company present in the application, and authenticates their register token
+ * @category Middlewares
+ * @param { Promise<Request> } req request
+ * @param { Promise<Response> } res response
+ * @param { Promise<Function> } next next
+ * @returns { Promise<Function> } next middleware or controller
+ * @throws { ApiError<401> } If the register token is not valid, expired or does not exist
+ */
 module.exports = async (req, res, next) => {
 
 	const token = req.headers.authorization;
 
-	const companyId = req.params.companyId;
+	const companyId = req.headers['company-id'];
 
 	try {
 

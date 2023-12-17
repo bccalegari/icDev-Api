@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	/**
 	 * Api Key Model
+	 * @category Models
 	 * @extends Model
 	 */
 	class ApiKey extends Model {

@@ -4,6 +4,7 @@ const { ValidationError } = require('sequelize');
  * Api Error Class
  * 
  * Handles exceptions and returns errors with http codes
+ * @category Errors
  * @extends Error
  */
 class ApiError extends Error {

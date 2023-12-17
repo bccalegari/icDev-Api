@@ -1,12 +1,13 @@
 const UserSignUpRequestDTO = require('./UserSignUpRequestDTO');
 const UserSignUpResponseDTO = require('./UserSignUpResponseDTO');
-const ApiError = require('../errors/ApiError');
+const ApiError = require('../../errors/ApiError');
 const UserSignInRequestDTO = require('./UserSignInRequestDTO');
 
 /**
  * User DTO Factory Class
  * 
  * Responsible for creating new DTO's in the user context
+ * @category DTOs
  */
 class UserDTOFactory {
 

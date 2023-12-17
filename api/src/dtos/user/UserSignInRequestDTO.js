@@ -19,7 +19,8 @@ class UserSignInRequestDTO {
 
 	/**
      * Class constructor
-     * @param { Model } user 
+     * @param { String } login user login
+     * @param { String } password user password 
      */
 	constructor(login, password) {
 		this.login = login;

@@ -631,19 +631,23 @@ INSERT INTO company (`name`, code, idApiKey) VALUES ('Test Company', '1111111111
 -- Password = 123
 
 INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
-  VALUES ('Test', 'Pengu', 'icdev.root', '$2a$10$LMrG2zc49pr0pLa7AOm5SeJgSxphKIaO/oxvXAK5mrwKPvjFWppiy', '11111111111', 'Test Street', 777, 'Test District', '1995-12-04', '11111111111', 'testPengu@test.com', 1, 1, 1);
-
--- -----------------------------------------------------
--- Table permission
--- -----------------------------------------------------
-
-INSERT INTO permission (`name`, `description`) VALUES ('tRoot', 'Test full permission');
+  VALUES ('Test', 'Pengu', 'pengu.master', '$2a$10$LMrG2zc49pr0pLa7AOm5SeJgSxphKIaO/oxvXAK5mrwKPvjFWppiy', '11111111111', 'Test Street', 777, 'Test District', '1995-12-04', '11111111111', 'testPengu@test.com', 1, 1, 1);
 
 -- -----------------------------------------------------
 -- Table role
 -- -----------------------------------------------------
 
-INSERT INTO role (`name`, `description`) VALUES ('tRoot', 'tRoot user, has test full permission');
+INSERT INTO role (`name`, `description`) VALUES ('Master', 'Master user, has full permission');
+
+-- -----------------------------------------------------
+-- Table permission
+-- -----------------------------------------------------
+
+INSERT INTO permission (`name`, `description`) VALUES ('Master', 'Full permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Create', 'Create permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Read', 'Read permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Update', 'Update permission');
+INSERT INTO permission (`name`, `description`) VALUES ('Delete', 'Delete');
 
 -- -----------------------------------------------------
 -- Table rolePermissions
@@ -656,3 +660,15 @@ INSERT INTO rolePermissions (idRole, idPermission) VALUES (1, 1);
 -- -----------------------------------------------------
 
 INSERT INTO userRoles (idUser, idRole) VALUES (1, 1);
+
+-- -----------------------------------------------------
+-- Table unitType
+-- -----------------------------------------------------
+
+INSERT INTO unitType (`name`) VALUES ('Supplier'), ('Shipping'), ('Stock');
+
+-- -----------------------------------------------------
+-- Table transactionType
+-- -----------------------------------------------------
+
+INSERT INTO transactionType (`name`) VALUES ('Input'), ('Output');

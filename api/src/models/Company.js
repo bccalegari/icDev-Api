@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 	
 	/**
 	 * Company Model
+	 * @category Models
 	 * @extends Model
 	 */
 	class Company extends Model {
