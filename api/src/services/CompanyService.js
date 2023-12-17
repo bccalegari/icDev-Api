@@ -88,40 +88,6 @@ class CompanyService {
 
 		}
 
-	}
-
-	/**
-	 * Get user company api key
-	 * @param { Number } companyId user company id
-	 * @param { Number } userId user id
-	 * @returns { Promise<ApiKeyResponseDTO> } user company api key
-	 */
-	async getUserCompanyApiKey(companyId, userId) {
-
-		logger.trace('=== Getting user company api key ===');
-		logger.trace(`[ Company id: ${companyId}, User id: ${userId} ]`);
-
-		try {
-
-			const userCompany = await this.#companyRepository.findCompanyById(companyId);
-
-			const userCompanyApiKey = await userCompany.getApiKey();
-
-			const userCompanyApiKeyResponseDTO = this.#apiKeyDTOFactory.createApiKeyResponseDTO(userCompanyApiKey);
-
-			logger.trace('=== User company api key get with success ===');
-			logger.trace(`[ User company api key: ${JSON.stringify(userCompanyApiKeyResponseDTO)}]`);
-
-			return userCompanyApiKeyResponseDTO;
-
-		} catch (error) {
-
-			logger.error(error);
-
-			ApiError.handleError(error);
-
-		}
-
 	}	
 
 	/**
