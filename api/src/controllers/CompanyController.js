@@ -1,5 +1,4 @@
 const CompanyService = require('../services/CompanyService');
-const companyService = new CompanyService();
 
 /**
  * Company Controller class
@@ -14,9 +13,11 @@ class CompanyController {
 	 * @param { Promise<Request> } req request
 	 * @param { Promise<Response> } res response
 	 */
-	static async getCompany(req, res) {
+	static async listCompany(req, res) {
 
 		try {
+
+			const companyService = new CompanyService();
 
 			const company = await companyService.getUserCompany(req.headers['company-id'], req.headers['user-id']);
 
@@ -38,6 +39,8 @@ class CompanyController {
 	static async newApiKey(req, res) {
 
 		try {
+
+			const companyService = new CompanyService();
 
 			const newApiKey = await companyService.generateNewUserCompanyApiKey(req.headers['company-id'], req.headers['user-id']);
 

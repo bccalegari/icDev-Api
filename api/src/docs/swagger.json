@@ -201,9 +201,76 @@
                 }
             }
         },
+        "info/cities": {
+            "get": {
+                "summary": "List all cities",
+                "description": "Returns a list of cities that can be used in the user registration route or in the unit registration route.",
+                "parameters": [ 
+                    {
+                        "in": "header",
+                        "name": "company-id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "User company id"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Offset for pagination"
+                    },
+                    {
+                        "in": "query",
+                        "name": "city",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "City name to search (partial search, case insensitive)"
+                    }
+                ],
+                "tags": ["Info"],
+                "security": [ { "registerToken": [] }, { "accessToken": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/listCitiesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/company": {
             "get": {
-                "summary": "Get user company",
+                "summary": "List user company",
                 "description": "Returns the company data of the logged in user if they have permission to view",
                 "parameters": [ 
                     {
@@ -509,6 +576,54 @@
                 "accessToken": {
                     "type": "string",
                     "required": true
+                }
+            }
+        },
+        "listCitiesResponse": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "city": {
+                        "type": "string",
+                        "size": 50,
+                        "required": true
+                    },
+                    "state": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "size": 50,
+                                "required": true
+                            },
+                            "isoAlpha2": {
+                                "type": "string",
+                                "size": 2,
+                                "required": true
+                            }
+                        }
+                    },
+                    "country": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "size": 50,
+                                "required": true
+                            },
+                            "isoAlpha2": {
+                                "type": "string",
+                                "size": 2,
+                                "required": true
+                            },
+                            "isoAlpha3": {
+                                "type": "string",
+                                "size": 3,
+                                "required": true
+                            }
+                        }
+                    }
                 }
             }
         },

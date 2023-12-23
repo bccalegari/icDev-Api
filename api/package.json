@@ -8,10 +8,11 @@
     "dev": "npm install && nodemon server.js",
     "tests": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand",
     "tests:coverage": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --coverage",
-    "tests:integration": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /unit",
+    "tests:integration": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /integration",
     "tests:e2e": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand /e2e",
     "tests:e2e:auth": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand authRoute",
     "tests:e2e:company": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand companyRoute",
+    "tests:e2e:info": "npm rebuild && export APP_ENV=test && jest --detectOpenHandles --silent --verbose --runInBand infoROute",
     "start": "node server.js"
   },
   "jest": {

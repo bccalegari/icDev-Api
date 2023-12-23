@@ -57,4 +57,3 @@ const roleMiddleware = (roleList) => {
 };
 
 module.exports = roleMiddleware;
-

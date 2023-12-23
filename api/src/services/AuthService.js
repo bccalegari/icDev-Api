@@ -50,7 +50,7 @@ class AuthService {
 	/**
      * Class constructor
      * 
-     * Instantiates all necessary repositories
+     * Instantiates all necessary repositories and dto factories
      */
 	constructor() {
 		this.#userRepository = new UserRepository();

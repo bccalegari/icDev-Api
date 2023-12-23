@@ -1,7 +1,5 @@
 const AuthService = require('../services/AuthService');
 
-const authService = new AuthService();
-
 /**
  * Auth Controller class
  * 
@@ -20,6 +18,8 @@ class AuthController {
 		const { companyCode } = req.body;
 
 		try {
+
+			const authService = new AuthService();
 
 			const registerToken = await authService.authenticateForRegister(companyCode);
 
@@ -44,6 +44,8 @@ class AuthController {
 
 		try {
 
+			const authService = new AuthService();
+
 			user = await authService.register(user, parseInt(req.headers['company-id']));
 
 			res.status(201).send(user);
@@ -66,6 +68,8 @@ class AuthController {
 		const { login, password } = req.body;
 
 		try {
+
+			const authService = new AuthService();
 
 			const accessToken = await authService.authenticate(login, password);
 

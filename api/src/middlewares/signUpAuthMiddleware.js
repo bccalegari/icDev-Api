@@ -11,7 +11,7 @@ const { logger } = require('../utils/logger');
  * @returns { Promise<Function> } next middleware or controller
  * @throws { ApiError<401> } If the register token is not valid, expired or does not exist
  */
-module.exports = async (req, res, next) => {
+async function signUpAuthMiddleware (req, res, next) {
 
 	const token = req.headers.authorization;
 
@@ -39,4 +39,6 @@ module.exports = async (req, res, next) => {
 		
 	}
 
-};
+}
+
+module.exports = signUpAuthMiddleware;

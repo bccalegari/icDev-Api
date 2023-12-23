@@ -51,15 +51,16 @@ class AbstractRepository {
 	 * @protected protected method
      * @param { Object } where where clause 
      * @param { Array<String> } attributes columns to select
+	 * @param { Object } options query options
      * @returns { Promise<(Array<Model>)> }
      */
-	async _getAllLazyElements(where = {}, attributes=[]) {
+	async _getAllLazyElements(where = {}, attributes=[], options={}) {
 
 		if (!(attributes.length === 0)) {
-			return await this.#db[this.model].findAll({ where: { ...where } , attributes: [ ...attributes ] });		
+			return await this.#db[this.model].findAll({ where: { ...where }, attributes: [ ...attributes ],  ...options });		
 		}
 
-		return await this.#db[this.model].findAll({ where: { ...where } });
+		return await this.#db[this.model].findAll({ where: { ...where },  ...options });
 	}
 
 	/**
@@ -68,10 +69,16 @@ class AbstractRepository {
      * @param { Object } where where clause 
      * @param { Object|String } includes join clause
      * @param { Array<String> } attributes columns to select
+	 * @param { Object } options query options
      * @returns { Promise<(Array<Model>)> }
      */
-	async _getAllEagerElements(where = {}, includes = [], attributes=[]) {
-		return await this.#db[this.model].findAll({ where: { ...where } , include: [ ...includes ] , attributes: [ ...attributes ] });
+	async _getAllEagerElements(where = {}, includes = [], attributes=[], options={}) {
+
+		if (!(attributes.length === 0)) {
+			return await this.#db[this.model].findAll({ where: { ...where }, include: [ ...includes ], attributes: [ ...attributes ], ...options });
+		}
+
+		return await this.#db[this.model].findAll({ where: { ...where }, include: [ ...includes ], ...options });
 	}
 
 	/**
@@ -79,15 +86,16 @@ class AbstractRepository {
 	 * @protected protected method
      * @param { Object } where where clause 
      * @param { Array<String> } attributes columns to select
+	 * @param { Object } options query options
      * @returns { Promise<Model> }
      */
-	async _getOneLazyElement(where = {}, attributes=[]) {
+	async _getOneLazyElement(where = {}, attributes=[], options={}) {
 
 		if (!(attributes.length === 0)) {
-			return await this.#db[this.model].findOne({ where: { ...where }, attributes: [ ...attributes ] });	
+			return await this.#db[this.model].findOne({ where: { ...where }, attributes: [ ...attributes ], ...options });	
 		}
 
-		return await this.#db[this.model].findOne({ where: { ...where } });
+		return await this.#db[this.model].findOne({ where: { ...where }, ...options });
 	}
 
 	/**
@@ -96,15 +104,16 @@ class AbstractRepository {
      * @param { Object } where where clause 
      * @param { Object|String } includes join clause
      * @param { Array<String> } attributes columns to select
+	 * @param { Object } options query options
      * @returns { Promise<Model> }
      */
-	async _getOneEagerElement(where = {}, includes = [], attributes=[]) {
+	async _getOneEagerElement(where = {}, includes = [], attributes=[], options={}) {
 
 		if (!(attributes.length === 0)) {
-			return await this.#db[this.model].findOne({ where: { ...where } , include: [ ...includes ] , attributes: [ ...attributes ] });
+			return await this.#db[this.model].findOne({ where: { ...where }, include: [ ...includes ], attributes: [ ...attributes ], ...options });
 		}
 
-		return await this.#db[this.model].findOne({ where: { ...where } , include: [ ...includes ] });
+		return await this.#db[this.model].findOne({ where: { ...where }, include: [ ...includes ], ...options });
 	}
 
 	/**

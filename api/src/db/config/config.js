@@ -13,7 +13,7 @@ module.exports = {
 				freezeTableName: true,
 				timestamps: false
 			},
-			logging: msg => logger.trace(msg),
+			logging: msg => logger.debug(msg),
 			pool: {
 				max: 5,
 				min: 0,
