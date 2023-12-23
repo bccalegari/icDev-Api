@@ -204,7 +204,7 @@
         "info/cities": {
             "get": {
                 "summary": "List all cities",
-                "description": "Returns a list of cities that can be used in the user registration route or in the unit registration route.",
+                "description": "Returns a list of cities that can be used in registration route or in creation routes.",
                 "parameters": [ 
                     {
                         "in": "header",
@@ -267,6 +267,58 @@
                     }
                 }
             }
+        },
+        "info/unit-types": {
+            "get": {
+                "summary": "List all unit types",
+                "description": "Returns a list of unit types that can be used in creation routes.",
+                "parameters": [ 
+                    {
+                        "in": "header",
+                        "name": "company-id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "User company id"
+                    }
+                ],
+                "tags": ["Info"],
+                "security": [ { "registerToken": [] }, { "accessToken": [] } ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/listUnitTypesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/definitions/responseMessage"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         },
         "/company": {
             "get": {
@@ -623,6 +675,19 @@
                                 "required": true
                             }
                         }
+                    }
+                }
+            }
+        },
+        "listUnitTypesResponse": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "size": 50,
+                        "required": true
                     }
                 }
             }

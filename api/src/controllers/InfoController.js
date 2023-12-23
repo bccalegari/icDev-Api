@@ -33,6 +33,29 @@ class InfoController {
 
 	}
 
+	/**
+	 * List all unit types
+	 * @param { Promise<Request> } req request
+	 * @param { Promise<Response> } res response
+	 */
+	static async listAllUnitTypes(req, res) {
+		
+		try {
+
+			const infoService = new InfoService();
+
+			const unitTypes = await infoService.getAllUnitTypes();
+
+			res.status(200).send(unitTypes);
+
+		} catch (error) {
+
+			res.status(error.status).send({ message: error.message });
+
+		}
+
+	}
+
 }
 
 module.exports = InfoController;

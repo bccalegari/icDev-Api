@@ -13,8 +13,8 @@ module.exports = app => {
 		'/v1',
 		bodyParser.json(),
 		auth,
-		company,
-		info
+		info,
+		company
 	);
 
 };

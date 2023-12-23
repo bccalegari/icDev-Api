@@ -199,4 +199,27 @@ describe('Info routes', () => {
 
 	});
 
+	describe('GET on /v1/info/unit-types', () => {
+		
+		test('listAllUnitTypes_ValidRequest_ReturningAllUnitTypes', async () => {
+
+			const response = await chai.request(app)
+				.get('/v1/info/unit-types')
+				.set('company-id', company.idCompany) 
+				.set('Authorization', `accessToken ${accessToken}`);
+
+			expect(response).toBeDefined();
+
+			expect(response).not.toBeNull();
+
+			expect(response.statusCode).toBe(200);
+
+			expect(response.body[0]).toEqual(expect.objectContaining({
+				name: expect.any(String)
+			}));
+
+		});
+
+	});
+
 });
