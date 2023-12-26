@@ -24,10 +24,10 @@ class UserSignUpResponseDTO {
 	login;
 
 	/**
-     * User cpf
+     * User tax identification
      * @type { String }
      */
-	cpf;
+	taxId;
 
 	/**
      * User street
@@ -52,6 +52,12 @@ class UserSignUpResponseDTO {
      * @type { String }
      */
 	complement;
+
+	/**
+      * User zip code
+      * @type { String }
+      */
+	zipCode;
 
 	/**
      * User city
@@ -94,11 +100,12 @@ class UserSignUpResponseDTO {
      * @param { String } name user name
      * @param { String } lastName user last name
      * @param { String } login user login
-     * @param { String } cpf user cpf
+     * @param { String } taxId user tax identification
      * @param { String } street user street
      * @param { Number } streetNumber user street number
      * @param { String } district user district
      * @param { String } complement user complement
+     * @param { String } zipCode user zip code
      * @param { String } city user city
      * @param { String } birthDate user birth date
      * @param { String } phone user phone
@@ -106,15 +113,16 @@ class UserSignUpResponseDTO {
      * @param { String } company user company
      * @param { String } createdAt user created date
      */
-	constructor(name, lastName, login, cpf, street, streetNumber, district, complement=null, city, birthDate, phone, email, company, createdAt) {
+	constructor(name, lastName, login, taxId, street, streetNumber, district, complement=null, zipCode, city, birthDate, phone, email, company, createdAt) {
 		this.name = name;
 		this.lastName = lastName;
 		this.login = login;
-		this.cpf = cpf;
+		this.taxId = taxId;
 		this.street = street;
 		this.streetNumber = streetNumber;
 		this.district = district; 
 		this.complement = complement;
+		this.zipCode = zipCode;
 		this.city = city;
 		this.birthDate = birthDate;
 		this.phone = phone;

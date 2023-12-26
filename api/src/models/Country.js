@@ -12,9 +12,19 @@ module.exports = (sequelize, DataTypes) => {
 	class Country extends Model{
 
 		static associate (models) {
+
 			Country.hasMany(models.state, {
 				foreignKey: 'idCountry'
 			});
+
+			Country.hasMany(models.unitTaxId, {
+				foreignKey: 'idUnitTaxId'
+			});
+
+			Country.hasMany(models.userTaxId, {
+				foreignKey: 'idUserTaxId'
+			});
+			
 		}
 		
 	}

@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   lastName VARCHAR(50) NOT NULL,
   login VARCHAR(30),
   `password` VARCHAR(80),
-  cpf CHAR(11) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   birthDate DATE NOT NULL,
   phone CHAR(14) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -109,7 +109,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   deletedAt DATETIME,
   idCompany INT NOT NULL,
   CONSTRAINT user_idUser_PK PRIMARY KEY (idUser),
-  CONSTRAINT user_cpf_UNIQUE UNIQUE (cpf),
   CONSTRAINT user_phone_UNIQUE UNIQUE (phone),
   CONSTRAINT user_email_UNIQUE UNIQUE (email),
   CONSTRAINT user_login_UNIQUE UNIQUE (login),
@@ -141,6 +140,30 @@ CREATE TABLE IF NOT EXISTS `user` (
 );
 
 -- -----------------------------------------------------
+-- Table userTaxId
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS userTaxId (
+  idUserTaxId INT NOT NULL AUTO_INCREMENT,
+  taxId VARCHAR(255) NOT NULL,
+  idUser INT NOT NULL,
+  idCountry INT NOT NULL,
+  CONSTRAINT userTaxId_idUserTaxId_PK PRIMARY KEY (idUserTaxId),
+  CONSTRAINT userTaxId_taxId_country_UNIQUE UNIQUE (taxId, idCountry),
+  CONSTRAINT userTaxId_user_UNIQUE UNIQUE (idUser),
+  CONSTRAINT userTaxId_user_FK 
+    FOREIGN KEY (idUser)
+    REFERENCES `user` (idUser)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT userTaxId_country_FK
+    FOREIGN KEY (idCountry)
+    REFERENCES country (idCountry)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
 -- Table unitType
 -- -----------------------------------------------------
 
@@ -158,12 +181,12 @@ CREATE TABLE IF NOT EXISTS unit (
   idUnit INT NOT NULL AUTO_INCREMENT,
   tradingName VARCHAR(255) NOT NULL,
   companyName VARCHAR(255) NOT NULL,
-  cnpj CHAR(14) NOT NULL,
   phone CHAR(14) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   email VARCHAR(255) NOT NULL,
   idCity INT NOT NULL,
   idUnitType INT NOT NULL,
@@ -175,7 +198,6 @@ CREATE TABLE IF NOT EXISTS unit (
   deletedAt DATETIME,
   idCompany INT NULL,
   CONSTRAINT unit_idUnit_PK PRIMARY KEY (idUnit),
-  CONSTRAINT unit_cnpj_UNIQUE UNIQUE (cnpj),
   CONSTRAINT unit_company_FK
     FOREIGN KEY (idCompany)
     REFERENCES company (idCompany)
@@ -204,6 +226,29 @@ CREATE TABLE IF NOT EXISTS unit (
   CONSTRAINT unit_city_FK
     FOREIGN KEY (idCity)
     REFERENCES city (idCity)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table unitTaxId
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS unitTaxId (
+  idUnitTaxId INT NOT NULL AUTO_INCREMENT,
+  taxId VARCHAR(255) NOT NULL,
+  idUnit INT NOT NULL,
+  idCountry INT NOT NULL,
+  CONSTRAINT unitTaxId_idUnitTaxId_PK PRIMARY KEY (idUnitTaxId),
+  CONSTRAINT unitTaxId_taxId_country_UNIQUE UNIQUE (taxId, idCountry),
+  CONSTRAINT unitTaxId_unit_UNIQUE UNIQUE (idUnit),
+  CONSTRAINT unitTaxId_unit_FK
+    FOREIGN KEY (idUnit)
+    REFERENCES unit (idUnit)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT unitTaxId_country_FK
+    FOREIGN KEY (idCountry)
+    REFERENCES country (idCountry)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -381,6 +426,7 @@ CREATE TABLE IF NOT EXISTS delivery (
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   trackingCode VARCHAR(255) NOT NULL,
   expectedDate DATE NOT NULL,
   deliveredDate DATE,
@@ -637,8 +683,14 @@ INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', 'db19f9700a92fbce'
 
 -- Password = icdev!root
 
-INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
-  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', '11111111111', 'icDev Street', 777, 'icDev District', '1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+INSERT INTO user (`name`, lastName, `login`, `password`, street, streetNumber, district, zipCode, birthDate, phone, email, idCity, createdBy, idCompany) 
+  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', 'icDev Street', 777, 'icDev District', '11111','1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+
+-- -----------------------------------------------------
+-- Table userTaxId
+-- -----------------------------------------------------
+
+INSERT INTO userTaxId (taxId, idUser, idCountry) VALUES ('11111111111', 1, 1);
 
 -- -----------------------------------------------------
 -- Table role

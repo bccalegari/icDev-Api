@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   lastName VARCHAR(50) NOT NULL,
   login VARCHAR(30),
   `password` VARCHAR(80),
-  cpf CHAR(11) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   birthDate DATE NOT NULL,
   phone CHAR(14) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -109,7 +109,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   deletedAt DATETIME,
   idCompany INT NOT NULL,
   CONSTRAINT user_idUser_PK PRIMARY KEY (idUser),
-  CONSTRAINT user_cpf_UNIQUE UNIQUE (cpf),
   CONSTRAINT user_phone_UNIQUE UNIQUE (phone),
   CONSTRAINT user_email_UNIQUE UNIQUE (email),
   CONSTRAINT user_login_UNIQUE UNIQUE (login),
@@ -141,6 +140,30 @@ CREATE TABLE IF NOT EXISTS `user` (
 );
 
 -- -----------------------------------------------------
+-- Table userTaxId
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS userTaxId (
+  idUserTaxId INT NOT NULL AUTO_INCREMENT,
+  taxId VARCHAR(255) NOT NULL,
+  idUser INT NOT NULL,
+  idCountry INT NOT NULL,
+  CONSTRAINT userTaxId_idUserTaxId_PK PRIMARY KEY (idUserTaxId),
+  CONSTRAINT userTaxId_taxId_country_UNIQUE UNIQUE (taxId, idCountry),
+  CONSTRAINT userTaxId_user_UNIQUE UNIQUE (idUser),
+  CONSTRAINT userTaxId_user_FK 
+    FOREIGN KEY (idUser)
+    REFERENCES `user` (idUser)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT userTaxId_country_FK
+    FOREIGN KEY (idCountry)
+    REFERENCES country (idCountry)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
 -- Table unitType
 -- -----------------------------------------------------
 
@@ -158,12 +181,12 @@ CREATE TABLE IF NOT EXISTS unit (
   idUnit INT NOT NULL AUTO_INCREMENT,
   tradingName VARCHAR(255) NOT NULL,
   companyName VARCHAR(255) NOT NULL,
-  cnpj CHAR(14) NOT NULL,
   phone CHAR(14) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   email VARCHAR(255) NOT NULL,
   idCity INT NOT NULL,
   idUnitType INT NOT NULL,
@@ -175,7 +198,6 @@ CREATE TABLE IF NOT EXISTS unit (
   deletedAt DATETIME,
   idCompany INT NULL,
   CONSTRAINT unit_idUnit_PK PRIMARY KEY (idUnit),
-  CONSTRAINT unit_cnpj_UNIQUE UNIQUE (cnpj),
   CONSTRAINT unit_company_FK
     FOREIGN KEY (idCompany)
     REFERENCES company (idCompany)
@@ -204,6 +226,29 @@ CREATE TABLE IF NOT EXISTS unit (
   CONSTRAINT unit_city_FK
     FOREIGN KEY (idCity)
     REFERENCES city (idCity)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+);
+
+-- -----------------------------------------------------
+-- Table unitTaxId
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS unitTaxId (
+  idUnitTaxId INT NOT NULL AUTO_INCREMENT,
+  taxId VARCHAR(255) NOT NULL,
+  idUnit INT NOT NULL,
+  idCountry INT NOT NULL,
+  CONSTRAINT unitTaxId_idUnitTaxId_PK PRIMARY KEY (idUnitTaxId),
+  CONSTRAINT unitTaxId_taxId_country_UNIQUE UNIQUE (taxId, idCountry),
+  CONSTRAINT unitTaxId_unit_UNIQUE UNIQUE (idUnit),
+  CONSTRAINT unitTaxId_unit_FK
+    FOREIGN KEY (idUnit)
+    REFERENCES unit (idUnit)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT unitTaxId_country_FK
+    FOREIGN KEY (idCountry)
+    REFERENCES country (idCountry)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 );
@@ -381,6 +426,7 @@ CREATE TABLE IF NOT EXISTS delivery (
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
   complement VARCHAR(255),
+  zipCode VARCHAR(32) NOT NULL,
   trackingCode VARCHAR(255) NOT NULL,
   expectedDate DATE NOT NULL,
   deliveredDate DATE,
@@ -596,141 +642,55 @@ CREATE TABLE IF NOT EXISTS transactionProducts (
 -- -----------------------------------------------------
 
 INSERT INTO country (`name`, isoAlpha2, isoAlpha3) 
-  VALUES ('Test Country', 'TC', 'TCT');
+  VALUES ('Brazil', 'BR', 'BRA'), 
+  ('United States of America', 'US', 'USA');
 
 -- -----------------------------------------------------
 -- Table state
 -- -----------------------------------------------------
 
-INSERT INTO `state` (`name`, isoAlpha2, idCountry) 
-  VALUES ('Test State', 'TS', 1);
+LOAD DATA INFILE '../mysql-files/data/states.csv' INTO TABLE `state`
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 ROWS;
 
 -- -----------------------------------------------------
 -- Table city
 -- -----------------------------------------------------
 
-INSERT INTO city (`name`, stateAcronym, idState) 
-  VALUES ('Test City', 'TS', 1),
-  ('Test City 2', 'TS', 1),
-  ('Test City 3', 'TS', 1),
-  ('Test City 4', 'TS', 1),
-  ('Test City 5', 'TS', 1),
-  ('Test City 6', 'TS', 1),
-  ('Test City 7', 'TS', 1),
-  ('Test City 8', 'TS', 1),
-  ('Test City 9', 'TS', 1),
-  ('Test City 10', 'TS', 1),
-  ('Test City 11', 'TS', 1),
-  ('Test City 12', 'TS', 1),
-  ('Test City 13', 'TS', 1),
-  ('Test City 14', 'TS', 1),
-  ('Test City 15', 'TS', 1),
-  ('Test City 16', 'TS', 1),
-  ('Test City 17', 'TS', 1),
-  ('Test City 18', 'TS', 1),
-  ('Test City 19', 'TS', 1),
-  ('Test City 20', 'TS', 1),
-  ('Test City 21', 'TS', 1),
-  ('Test City 22', 'TS', 1),
-  ('Test City 23', 'TS', 1),
-  ('Test City 24', 'TS', 1),
-  ('Test City 25', 'TS', 1),
-  ('Test City 26', 'TS', 1),
-  ('Test City 27', 'TS', 1),
-  ('Test City 28', 'TS', 1),
-  ('Test City 29', 'TS', 1),
-  ('Test City 30', 'TS', 1),
-  ('Test City 31', 'TS', 1),
-  ('Test City 32', 'TS', 1),
-  ('Test City 33', 'TS', 1),
-  ('Test City 34', 'TS', 1),
-  ('Test City 35', 'TS', 1),
-  ('Test City 36', 'TS', 1),
-  ('Test City 37', 'TS', 1),
-  ('Test City 38', 'TS', 1),
-  ('Test City 39', 'TS', 1),
-  ('Test City 40', 'TS', 1),
-  ('Test City 41', 'TS', 1),
-  ('Test City 42', 'TS', 1),
-  ('Test City 43', 'TS', 1),
-  ('Test City 44', 'TS', 1),
-  ('Test City 45', 'TS', 1),
-  ('Test City 46', 'TS', 1),
-  ('Test City 47', 'TS', 1),
-  ('Test City 48', 'TS', 1),
-  ('Test City 49', 'TS', 1),
-  ('Test City 50', 'TS', 1),
-  ('Test City 51', 'TS', 1),
-  ('Test City 52', 'TS', 1),
-  ('Test City 53', 'TS', 1),
-  ('Test City 54', 'TS', 1),
-  ('Test City 55', 'TS', 1),
-  ('Test City 56', 'TS', 1),
-  ('Test City 57', 'TS', 1),
-  ('Test City 58', 'TS', 1),
-  ('Test City 59', 'TS', 1),
-  ('Test City 60', 'TS', 1),
-  ('Test City 61', 'TS', 1),
-  ('Test City 62', 'TS', 1),
-  ('Test City 63', 'TS', 1),
-  ('Test City 64', 'TS', 1),
-  ('Test City 65', 'TS', 1),
-  ('Test City 66', 'TS', 1),
-  ('Test City 67', 'TS', 1),
-  ('Test City 68', 'TS', 1),
-  ('Test City 69', 'TS', 1),
-  ('Test City 70', 'TS', 1),
-  ('Test City 71', 'TS', 1),
-  ('Test City 72', 'TS', 1),
-  ('Test City 73', 'TS', 1),
-  ('Test City 74', 'TS', 1),
-  ('Test City 75', 'TS', 1),
-  ('Test City 76', 'TS', 1),
-  ('Test City 77', 'TS', 1),
-  ('Test City 78', 'TS', 1),
-  ('Test City 79', 'TS', 1),
-  ('Test City 80', 'TS', 1),
-  ('Test City 81', 'TS', 1),
-  ('Test City 82', 'TS', 1),
-  ('Test City 83', 'TS', 1),
-  ('Test City 84', 'TS', 1),
-  ('Test City 85', 'TS', 1),
-  ('Test City 86', 'TS', 1),
-  ('Test City 87', 'TS', 1),
-  ('Test City 88', 'TS', 1),
-  ('Test City 89', 'TS', 1),
-  ('Test City 90', 'TS', 1),
-  ('Test City 91', 'TS', 1),
-  ('Test City 92', 'TS', 1),
-  ('Test City 93', 'TS', 1),
-  ('Test City 94', 'TS', 1),
-  ('Test City 95', 'TS', 1),
-  ('Test City 96', 'TS', 1),
-  ('Test City 97', 'TS', 1),
-  ('Test City 98', 'TS', 1),
-  ('Test City 99', 'TS', 1),
-  ('Test City 100', 'TS', 1);
+LOAD DATA INFILE '../mysql-files/data/cities.csv' INTO TABLE city
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\n'
+    IGNORE 1 ROWS;
 
 -- -----------------------------------------------------
 -- Table apiKey
 -- -----------------------------------------------------
 
-INSERT INTO apiKey (`key`) VALUES ('1111111111111111');
+INSERT INTO apiKey (`key`) VALUES ('f5bc9cb12c0525c7');
 
 -- -----------------------------------------------------
 -- Table company
 -- -----------------------------------------------------
 
-INSERT INTO company (`name`, code, idApiKey) VALUES ('Test Company', '1111111111111111', 1);
+INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', 'db19f9700a92fbce', 1);
 
 -- -----------------------------------------------------
 -- Table user
 -- -----------------------------------------------------
 
--- Password = 123
+-- Password = icdev!root
 
-INSERT INTO user (`name`, lastName, `login`, `password`, cpf, street, streetNumber, district, birthDate, phone, email, idCity, createdBy, idCompany) 
-  VALUES ('Test', 'Pengu', 'pengu.master', '$2a$10$LMrG2zc49pr0pLa7AOm5SeJgSxphKIaO/oxvXAK5mrwKPvjFWppiy', '11111111111', 'Test Street', 777, 'Test District', '1995-12-04', '11111111111', 'testPengu@test.com', 1, 1, 1);
+INSERT INTO user (`name`, lastName, `login`, `password`, street, streetNumber, district, zipCode, birthDate, phone, email, idCity, createdBy, idCompany) 
+  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', 'icDev Street', 777, 'icDev District', '11111','1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+
+-- -----------------------------------------------------
+-- Table userTaxId
+-- -----------------------------------------------------
+
+INSERT INTO userTaxId (taxId, idUser, idCountry) VALUES ('11111111111', 1, 1);
 
 -- -----------------------------------------------------
 -- Table role

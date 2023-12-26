@@ -25,7 +25,7 @@ class UserDTOFactory {
 			throw ApiError.badRequest('User data is required');
 		} 
 
-		const { name, lastName, login, password, cpf, street, streetNumber, district, complement, city, birthDate, phone, email } = userData;
+		const { name, lastName, login, password, street, streetNumber, district, complement, zipCode, city, birthDate, phone, email } = userData;
 		
 		if (!password) {
 			throw ApiError.badRequest('Password is required');
@@ -39,22 +39,23 @@ class UserDTOFactory {
 			throw ApiError.badRequest('Invalid city name');
 		}
 
-		return new UserSignUpRequestDTO(name, lastName, login, password, cpf, street, streetNumber, 
-			district, complement, birthDate, phone, email, cityModel.idCity, idCompany);
+		return new UserSignUpRequestDTO(name, lastName, login, password, street, streetNumber, 
+			district, complement, zipCode, birthDate, phone, email, cityModel.idCity, idCompany);
 	}
 
 	/**
      * Create an new user DTO to return data of sign up
      * @param { Model<User> } userModel User model
+	 * @param { Model<UserTaxId> } userTaxIdModel User tax identification model
 	 * @param { Model<City> } cityModel User city model
 	 * @param { Model<Company> } idCompany User company model
      * @returns { UserSignUpResponseDTO } UserSignUpResponseDTO
      */
-	createUserSignUpResponseDTO(userModel, cityModel, companyModel) {
+	createUserSignUpResponseDTO(userModel, userTaxIdModel, cityModel, companyModel) {
 
-		const { name, lastName, login, cpf, street, streetNumber, district, complement, birthDate, phone, email, createdAt } = userModel;
+		const { name, lastName, login, street, streetNumber, district, complement, zipCode, birthDate, phone, email, createdAt } = userModel;
 
-		return new UserSignUpResponseDTO(name, lastName, login, cpf, street, streetNumber, district, complement, cityModel.name, birthDate, phone, email, companyModel.name, createdAt);
+		return new UserSignUpResponseDTO(name, lastName, login, userTaxIdModel.taxId, street, streetNumber, district, complement, zipCode, cityModel.name, birthDate, phone, email, companyModel.name, createdAt);
 	}
 
 	/**

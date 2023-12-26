@@ -11,13 +11,13 @@ describe('UserRoles Model Unit Tests', () => {
 	let testRole;
 
 	beforeAll(async () => {
-		testUser = await User.create({
+		testUser = await await User.create({
 			name: DataBuilder.randomString(50),
 			lastName: DataBuilder.randomString(50),
-			cpf: DataBuilder.randomString(11),
 			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
 			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			birthDate: DataBuilder.randomDate(),
 			phone: DataBuilder.randomString(14),
 			email: DataBuilder.randomEmail(),
@@ -121,11 +121,11 @@ describe('UserRoles Model Unit Tests', () => {
 			lastName: expect.any(String),
 			login: expect.toBeOneOf([expect.any(String), null]),
 			password: expect.toBeOneOf([expect.any(String), null]),
-			cpf: expect.any(String),
 			street: expect.any(String),
 			streetNumber: expect.any(Number),
 			district: expect.any(String),
 			complement: expect.toBeOneOf([expect.any(String), null]),
+			zipCode: expect.any(String),
 			birthDate: expect.any(String),
 			phone: expect.any(String),
 			email: expect.any(String),
@@ -160,11 +160,11 @@ describe('UserRoles Model Unit Tests', () => {
 			lastName: expect.any(String),
 			login: expect.toBeOneOf([expect.any(String), null]),
 			password: expect.toBeOneOf([expect.any(String), null]),
-			cpf: expect.any(String),
 			street: expect.any(String),
 			streetNumber: expect.any(Number),
 			district: expect.any(String),
 			complement: expect.toBeOneOf([expect.any(String), null]),
+			zipCode: expect.any(String),
 			birthDate: expect.any(String),
 			phone: expect.any(String),
 			email: expect.any(String),

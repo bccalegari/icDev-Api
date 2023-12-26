@@ -30,12 +30,6 @@ class UserSignUpRequestDTO {
 	password;
 
 	/**
-     * User cpf
-     * @type { String }
-     */
-	cpf;
-
-	/**
      * User street
      * @type { String }
      */
@@ -58,6 +52,12 @@ class UserSignUpRequestDTO {
      * @type { String }
      */
 	complement;
+
+	/**
+      * User zip code
+      * @type { String }
+      */
+	zipCode;
 
 	/**
      * User birth date
@@ -95,27 +95,27 @@ class UserSignUpRequestDTO {
      * @param { String } lastName user last name
      * @param { String } login user login
      * @param { String } password user password
-     * @param { String } cpf user cpf
      * @param { String } street user street
      * @param { Number } streetNumber user street number
      * @param { String } district user district
      * @param { String } complement user complement
+     * @param { String } zipCode user zip code
      * @param { String } birthDate user birth date
      * @param { String } phone user phone
      * @param { String } email user email
      * @param { Number } idCity user city id
      * @param { Number } idCompany user company id
      */
-	constructor(name, lastName, login, password, cpf, street, streetNumber, district, complement, birthDate, phone, email, idCity, idCompany) {
+	constructor(name, lastName, login, password, street, streetNumber, district, complement, zipCode, birthDate, phone, email, idCity, idCompany) {
 		this.name = name;
 		this.lastName = lastName;
 		this.login = login;
 		this.password = password;
-		this.cpf = cpf;
 		this.street = street;
 		this.streetNumber = streetNumber;
 		this.district = district; 
 		this.complement = complement;
+		this.zipCode = zipCode;
 		this.birthDate = birthDate;
 		this.phone = phone;
 		this.email = email;

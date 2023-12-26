@@ -28,12 +28,13 @@ class UserRepository extends AbstractRepository {
 	/**
 	 * Create a user
 	 * @param { Object } user user data
+	 * @param { Transaction } transaction database transaction, by default it is null
 	 * @param { Number } createdBy user id of the record creator, by default it is 1 (icDevRoot)
 	 * @returns { Promise<Model<User>> } user inserted model
 	 * @throws { Error } If the insert goes wrong
 	 */
-	async createUser(user, createdBy) {
-		return await this._insertElement(user, createdBy);
+	async createUser(user, transaction=null, createdBy=1) {
+		return await this._insertElement(user, transaction, createdBy);
 	}
 
 	/**

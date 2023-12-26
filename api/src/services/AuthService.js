@@ -6,6 +6,9 @@ const CompanyRepository = require('../repositories/CompanyRepository');
 const CityRepository = require('../repositories/CityRepository');
 const UserDTOFactory = require('../dtos/user/UserDTOFactory');
 const { logger } = require('../utils/logger');
+const UserTaxIdRepository = require('../repositories/UserTaxIdRepository');
+const TaxIdDTOFactory = require('../dtos/taxId/TaxIdDTOFactory');
+const TransactionManager = require('../db/utils/TransactionManager');
 
 /**
  * Auth Service Class
@@ -48,6 +51,30 @@ class AuthService {
 	#userDTOFactory;
 
 	/**
+	 * User Tax Identification Repository
+	 * @private
+	 * @constant
+	 * @type { UserTaxIdRepository }
+	 */
+	#userTaxIdRepository;
+
+	/**
+	 * Tax Identification DTO Factory
+	 * @private
+	 * @constant
+	 * @type { TaxIdDTOFactory }
+	 */
+	#taxIdDTOFactory;
+
+	/**
+	 * Database transaction manager
+	 * @private
+	 * @constant
+	 * @type { TransactionManager }
+	 */
+	#transactionManager;
+
+	/**
      * Class constructor
      * 
      * Instantiates all necessary repositories and dto factories
@@ -57,6 +84,9 @@ class AuthService {
 		this.#companyRepository = new CompanyRepository();
 		this.#cityRepository = new CityRepository();
 		this.#userDTOFactory = new UserDTOFactory();
+		this.#userTaxIdRepository = new UserTaxIdRepository();
+		this.#taxIdDTOFactory = new TaxIdDTOFactory();
+		this.#transactionManager = new TransactionManager();
 	}
 
 	/**
@@ -229,6 +259,8 @@ class AuthService {
 		logger.trace('=== Registering a new user ===');
 		logger.trace(`[ Company id: ${companyId}, User data: ${JSON.stringify(user)} ]`);
 
+		const transaction = await this.#transactionManager.getTransaction();
+
 		try {
 	
 			const userCity = await this.#cityRepository.findCityByName(user.city ?? null);
@@ -237,20 +269,34 @@ class AuthService {
 
 			userSignUpRequestDTO.password = await bcrypt.hash(userSignUpRequestDTO.password, 10);
 
-			const newUser = await this.#userRepository.createUser(userSignUpRequestDTO);
+			const newUser = await this.#userRepository.createUser(userSignUpRequestDTO, transaction);
 
 			const newUserCity = await newUser.getCity();
 
+			const newUserCountry = await newUserCity.getState().then(state => state.getCountry());
+
+			if (this.#userTaxIdRepository.findUserTaxIdByTaxIdAndIdCountry(user.taxId, newUserCountry.idCountry)) {
+				throw ApiError.badRequest('Tax id already exists');
+			}
+
+			const newUserTaxIdentificationDTO = this.#taxIdDTOFactory.createUserTaxIdDTO(user.taxId, newUser.idUser, newUserCountry.idCountry);
+
+			const newUserTaxIdentification = await this.#userTaxIdRepository.createUserTaxId(newUserTaxIdentificationDTO, transaction);
+
 			const newUserCompany = await newUser.getCompany();
 
-			const userSignUpResponseDTO = this.#userDTOFactory.createUserSignUpResponseDTO(newUser, newUserCity, newUserCompany);
+			const userSignUpResponseDTO = this.#userDTOFactory.createUserSignUpResponseDTO(newUser, newUserTaxIdentification, newUserCity, newUserCompany);
 
 			logger.trace('=== User registered successfully ===');
 			logger.trace(`[ User id: ${newUser.idUser} ]`);
 
+			await transaction.commit();
+
 			return userSignUpResponseDTO;
 
 		} catch (error) {
+
+			await transaction.rollback();
 
 			logger.error(error);
 

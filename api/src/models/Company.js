@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, ValidationError } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 	
@@ -62,11 +62,11 @@ module.exports = (sequelize, DataTypes) => {
 					args: [0, 16],
 					msg: 'Code must be less than 16 characters'
 				},
-				isUnique(value) {
+				async isUnique(value) {
 					return Company.findOne({ where: { code: value } })
 						.then((company) => {
 							if (company) {
-								throw new Error('code already exists');
+								throw new ValidationError('code already exists');
 							}
 						});
 				}
@@ -80,11 +80,11 @@ module.exports = (sequelize, DataTypes) => {
 				isInt: {
 					msg: 'idApiKey must be an integer'
 				},
-				isUnique(value) {
+				async isUnique(value) {
 					return Company.findOne({ where: { idApiKey: value } })
 						.then((company) => {
 							if (company) {
-								throw new Error('idApiKey already exists');
+								throw new ValidationError('idApiKey already exists');
 							}
 						});
 				}

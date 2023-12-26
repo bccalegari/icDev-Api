@@ -38,9 +38,15 @@ module.exports = (sequelize, DataTypes) => {
 
 			User.belongsToMany(models.role, {
 				foreignKey: 'idUser',
-				through: 'userRoles' });
+				through: 'userRoles' 
+			});
 
+			User.hasOne(models.userTaxId, {
+				foreignKey: 'idUser'
+			});
+				
 		}
+		
 	}
 
 	User.init({
@@ -91,12 +97,12 @@ module.exports = (sequelize, DataTypes) => {
 					args: [0, 30],
 					msg: 'login must be less than 30 characters'
 				},
-				isUnique(value) {
+				async isUnique(value) {
 					if (value != null) {
 						return User.findOne({ where: { login: value } })
 							.then((company) => {
 								if (company) {
-									throw new Error('login already exists');
+									throw new ValidationError('login already exists');
 								}
 							});
 
@@ -111,31 +117,6 @@ module.exports = (sequelize, DataTypes) => {
 				len: {
 					args: [0, 80],
 					msg: 'password must be less than 32 characters'
-				}
-			}
-		},
-		cpf: {
-			type: DataTypes.STRING(11),
-			allowNull: false,
-			unique: true,
-			validate: {
-				notNull: {
-					msg: 'cpf is required'
-				},
-				notEmpty: {
-					msg: 'cpf is required'
-				},
-				len: {
-					args: [11, 11],
-					msg: 'cpf must be 11 characters long'
-				},
-				isUnique(value) {
-					return User.findOne({ where: { cpf: value } })
-						.then((user) => {
-							if (user) {
-								throw new Error('cpf already exists');
-							}
-						});
 				}
 			}
 		},
@@ -193,6 +174,22 @@ module.exports = (sequelize, DataTypes) => {
 				}
 			}
 		},
+		zipCode: {
+			type: DataTypes.STRING(32),
+			allowNull: false,
+			validate: {
+				notNull: {
+					msg: 'zipCode is required'
+				},
+				notEmpty: {
+					msg: 'zipCode is required'
+				},
+				len: {
+					args: [0, 32],
+					msg: 'zipCode must be less than 32 characters'
+				}
+			}
+		},
 		birthDate: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
@@ -227,11 +224,11 @@ module.exports = (sequelize, DataTypes) => {
 					args: [0, 14],
 					msg: 'phone must be less than 14 characters'
 				},
-				isUnique(value) {
+				async isUnique(value) {
 					return User.findOne({ where: { phone: value } })
 						.then((user) => {
 							if (user) {
-								throw new Error('phone already exists');
+								throw new ValidationError('phone already exists');
 							}
 						});
 				}
@@ -255,11 +252,11 @@ module.exports = (sequelize, DataTypes) => {
 				isEmail: {
 					msg: 'email must be a valid email'
 				},
-				isUnique(value) {
+				async isUnique(value) {
 					return User.findOne({ where:{ email: value } })
 						.then((user) => {
 							if (user) {
-								throw new Error('email already exists');
+								throw new ValidationError('email already exists');
 							}
 						});
 				}

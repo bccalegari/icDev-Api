@@ -88,7 +88,19 @@ class ApiError extends Error {
 		}
 
 		if (error instanceof ValidationError) {
-			throw ApiError.badRequest(error.message);
+
+			const errorList = [];
+
+			if (error.errors.length === 0) {
+				throw ApiError.badRequest(error.message);
+			}
+
+			error.errors.forEach((error) => {
+				errorList.push(error.message);
+			});
+
+			throw ApiError.badRequest(errorList);
+			
 		}
 
 		throw ApiError.internalServerError();

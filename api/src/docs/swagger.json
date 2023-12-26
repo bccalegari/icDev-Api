@@ -495,9 +495,8 @@
                     "type": "string",
                     "required": true
                 },
-                "cpf": {
+                "taxId": {
                     "type": "string",
-                    "size": 11,
                     "required": true
                 },
                 "street": {
@@ -512,6 +511,16 @@
                 "district": {
                     "type": "string",
                     "size": 150,
+                    "required": true
+                },
+                "complement": {
+                    "type": "string",
+                    "size": 255,
+                    "required": false
+                },
+                "zipCode": {
+                    "type": "string",
+                    "size": 32,
                     "required": true
                 },
                 "birthDate": {
@@ -554,9 +563,8 @@
                     "size": 30,
                     "required": true
                 },
-                "cpf": {
+                "taxId": {
                     "type": "string",
-                    "size": 11,
                     "required": true
                 },
                 "street": {
@@ -577,6 +585,11 @@
                     "type": "string",
                     "size": 255,
                     "required": false
+                },
+                "zipCode": {
+                    "type": "string",
+                    "size": 32,
+                    "required": true
                 },
                 "city": {
                     "type": "string",

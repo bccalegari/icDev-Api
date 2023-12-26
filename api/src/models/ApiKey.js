@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, ValidationError } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -31,10 +31,24 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 			unique: true,
 			validate: {
+				notNull: {
+					msg: 'Key is required'
+				},
+				notEmpty: {
+					msg: 'Key is required'
+				},
 				len: {
 					args: [16, 16],
 					msg: 'Key must be 16 characters long'
 				}
+			},
+			async isUnique(value) {
+				return ApiKey.findOne({ where: { key: value } })
+					.then((apiKey) => {
+						if (apiKey) {
+							throw new ValidationError('key already exists');
+						}
+					});
 			}
 		}
 	}, {
