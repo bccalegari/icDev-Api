@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
 			City.hasMany(models.user, {
 				foreignKey: 'idCity',
 			});
+
+			City.hasMany(models.unit, {
+				foreignKey: 'idCity',
+			});
 			
 		}
 

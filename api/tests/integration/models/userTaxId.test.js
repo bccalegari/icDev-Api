@@ -147,7 +147,7 @@ describe('UserTaxId Model Unit Tests', () => {
 			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
 			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
 			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
-			idCompany: expect.any(Number)
+			idCompany: expect.any(Number),
 		}));
 
 		await userTaxId.destroy();
@@ -183,7 +183,7 @@ describe('UserTaxId Model Unit Tests', () => {
 			updatedAt: expect.toBeOneOf([expect.any(Date), null]),
 			deletedBy: expect.toBeOneOf([expect.any(Number), null]),
 			deletedAt: expect.toBeOneOf([expect.any(Date), null]),
-			idCompany: expect.any(Number)
+			idCompany: expect.any(Number),
 		}));
 
 		await userTaxId.destroy();

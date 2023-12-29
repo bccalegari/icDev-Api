@@ -5,122 +5,97 @@ const { Model, ValidationError } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 
 	/**
-	 * User Model
+	 * Unit Model
 	 * @category Models
 	 * @extends Model
 	 */
-	class User extends Model {
+	class Unit extends Model {
 
 		static associate(models) {
-
-			User.belongsTo(models.city, {
+			
+			Unit.belongsTo(models.city, {
 				foreignKey: 'idCity'
 			});
 
-			User.belongsTo(models.user, {
+			Unit.belongsTo(models.unitType, {
+				foreignKey: 'idUnitType'
+			});
+
+			Unit.belongsTo(models.user, {
 				foreignKey: 'createdBy',
 				as: 'userCreatedBy'
 			});
 
-			User.belongsTo(models.user, {
+			Unit.belongsTo(models.user, {
 				foreignKey: 'updatedBy',
 				as: 'userUpdatedBy'
 			});
 
-			User.belongsTo(models.user, {
+			Unit.belongsTo(models.user, {
 				foreignKey: 'deletedBy',
 				as: 'userDeletedBy'
 			});
 
-			User.belongsTo(models.company, {
+			Unit.belongsTo(models.company, {
 				foreignKey: 'idCompany'
 			});
 
-			User.belongsToMany(models.role, {
-				foreignKey: 'idUser',
-				through: 'userRoles' 
-			});
-
-			User.hasOne(models.userTaxId, {
-				foreignKey: 'idUser'
-			});
-
-			User.hasMany(models.unit, {
-				foreignKey: 'idUser'
-			});
-				
 		}
-		
+
 	}
 
-	User.init({
-		idUser: {
+	Unit.init({
+		idUnit: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			autoIncrement: true,
 			primaryKey: true
 		},
-		name: {
-			type: DataTypes.STRING(50),
+		tradingName: {
+			type: DataTypes.STRING(255),
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: 'Name is required'
+					msg: 'Trading name is required'
 				},
 				notEmpty: {
-					msg: 'Name is required'
+					msg: 'Trading name is required'
 				},
 				len: {
-					args: [0, 50],
-					msg: 'Name must be less than 50 characters'
+					args: [0, 255],
+					msg: 'Trading name must be less than 255 characters'
 				}
 			}
 		},
-		lastName: {
-			type: DataTypes.STRING(50),
+		companyName: {
+			type: DataTypes.STRING(255),
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: 'lastName is required'
+					msg: 'Company name is required'
 				},
 				notEmpty: {
-					msg: 'lastName is required'
+					msg: 'Company name is required'
 				},
 				len: {
-					args: [0, 50],
-					msg: 'lastName must be less than 50 characters'
+					args: [0, 255],
+					msg: 'Company name must be less than 255 characters'
 				}
 			}
 		},
-		login: {
-			type: DataTypes.STRING(30),
-			allowNull: true,
-			unique: true,
+		phone: {
+			type: DataTypes.STRING(15),
+			allowNull: false,
 			validate: {
-				len: {
-					args: [0, 30],
-					msg: 'login must be less than 30 characters'
+				notNull: {
+					msg: 'Phone is required'
 				},
-				async isUnique(value) {
-					if (value != null) {
-						return User.findOne({ where: { login: value } })
-							.then((company) => {
-								if (company) {
-									throw new ValidationError('login already exists');
-								}
-							});
-
-					}
-				}
-			}
-		},
-		password: {
-			type: DataTypes.STRING(80),
-			allowNull: true,
-			validate: {
+				notEmpty: {
+					msg: 'Phone is required'
+				},
 				len: {
-					args: [0, 80],
-					msg: 'password must be less than 32 characters'
+					args: [0, 15],
+					msg: 'Phone must be less than 15 characters'
 				}
 			}
 		},
@@ -194,75 +169,22 @@ module.exports = (sequelize, DataTypes) => {
 				}
 			}
 		},
-		birthDate: {
-			type: DataTypes.DATEONLY,
-			allowNull: false,
-			validate: {
-				notNull: {
-					msg: 'birthDate is required'
-				},
-				notEmpty: {
-					msg: 'birthDate is required'
-				},
-				isDate: {
-					msg: 'birthDate must be a date'
-				},
-				isBefore: {
-					args: [new Date().toISOString().split('T')[0]],
-					msg: 'birthDate must be before today'
-				}
-			}
-		},
-		phone: {
-			type: DataTypes.STRING(14),
-			allowNull: false,
-			unique: true,
-			validate: {
-				notNull: {
-					msg: 'phone is required'
-				},
-				notEmpty: {
-					msg: 'phone is required'
-				},
-				len: {
-					args: [0, 15],
-					msg: 'phone must be less than 15 characters'
-				},
-				async isUnique(value) {
-					return User.findOne({ where: { phone: value } })
-						.then((user) => {
-							if (user) {
-								throw new ValidationError('phone already exists');
-							}
-						});
-				}
-			}
-		},
 		email: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(255),
 			allowNull: false,
-			unique: true,
 			validate: {
 				notNull: {
 					msg: 'email is required'
 				},
 				notEmpty: {
 					msg: 'email is required'
-				},
-				len: {
-					args: [0, 255],
-					msg: 'email must be less than 255 characters'
 				},
 				isEmail: {
 					msg: 'email must be a valid email'
 				},
-				async isUnique(value) {
-					return User.findOne({ where:{ email: value } })
-						.then((user) => {
-							if (user) {
-								throw new ValidationError('email already exists');
-							}
-						});
+				len: {
+					args: [0, 255],
+					msg: 'email must be less than 255 characters'
 				}
 			}
 		},
@@ -275,6 +197,18 @@ module.exports = (sequelize, DataTypes) => {
 				},
 				isInt: {
 					msg: 'idCity must be an integer'
+				}
+			}
+		},
+		idUnitType: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			validate: {
+				notNull: {
+					msg: 'idUnitType is required'
+				},
+				isInt: {
+					msg: 'idUnitType must be an integer'
 				}
 			}
 		},
@@ -330,11 +264,8 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		idCompany: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 			validate: {
-				notNull: {
-					msg: 'idCompany is required'
-				},
 				isInt: {
 					msg: 'idCompany must be an integer'
 				}
@@ -342,7 +273,7 @@ module.exports = (sequelize, DataTypes) => {
 		}
 	}, {
 		hooks: {
-			beforeCreate: (user, options) => {
+			beforeCreate: (unit, options) => {
 
 				if (!options.createdBy) {
 					throw new ValidationError('createdBy is required');
@@ -356,10 +287,10 @@ module.exports = (sequelize, DataTypes) => {
 					throw new ValidationError('createdAt is not allowed');
 				}
 
-				user.createdBy = options.createdBy;
-				user.createdAt = new Date();
+				unit.createdBy = options.createdBy;
+				unit.createdAt = new Date();
 			},
-			beforeUpdate: (user, options) => {
+			beforeUpdate: (unit, options) => {
 
 				if (!options.updatedBy) {
 					throw new ValidationError('updatedBy is required');
@@ -373,10 +304,10 @@ module.exports = (sequelize, DataTypes) => {
 					throw new ValidationError('updatedAt is not allowed');
 				}
 
-				user.updatedBy = options.updatedBy;
-				user.updatedAt = new Date();
+				unit.updatedBy = options.updatedBy;
+				unit.updatedAt = new Date();
 			},
-			beforeDestroy: (user, options) => {
+			beforeDestroy: (unit, options) => {
 
 				if (options.force !== true) {
 
@@ -394,7 +325,7 @@ module.exports = (sequelize, DataTypes) => {
 					throw new ValidationError('deletedAt is not allowed');
 				}
 
-				user.deletedBy = options.deletedBy;
+				unit.deletedBy = options.deletedBy;
 			}
 		},
 		sequelize,
@@ -402,9 +333,9 @@ module.exports = (sequelize, DataTypes) => {
 		createdAt: false,
 		updatedAt: false,
 		paranoid: true,
-		modelName: 'user',
+		modelName: 'unit',
 		freezeTableName: true
 	});
 
-	return User;
+	return Unit;
 };

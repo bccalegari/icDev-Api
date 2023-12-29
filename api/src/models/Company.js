@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
 			Company.hasMany(models.user, {
 				foreignKey: 'idCompany'
 			});
+
+			Company.hasMany(models.unit, {
+				foreignKey: 'idCompany'
+			});
+
 		}
 
 	}

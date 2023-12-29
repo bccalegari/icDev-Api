@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   complement VARCHAR(255),
   zipCode VARCHAR(32) NOT NULL,
   birthDate DATE NOT NULL,
-  phone CHAR(14) NOT NULL,
+  phone CHAR(15) NOT NULL,
   email VARCHAR(255) NOT NULL,
   idCity INT NOT NULL,
   createdBy INT,
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS unit (
   idUnit INT NOT NULL AUTO_INCREMENT,
   tradingName VARCHAR(255) NOT NULL,
   companyName VARCHAR(255) NOT NULL,
-  phone CHAR(14) NOT NULL,
+  phone CHAR(15) NOT NULL,
   street VARCHAR(150) NOT NULL,
   streetNumber INT NOT NULL,
   district VARCHAR(150) NOT NULL,
@@ -731,3 +731,16 @@ INSERT INTO unitType (`name`) VALUES ('Supplier'), ('Shipping'), ('Stock');
 -- -----------------------------------------------------
 
 INSERT INTO transactionType (`name`) VALUES ('Input'), ('Output');
+
+-- -----------------------------------------------------
+-- Table unit
+-- -----------------------------------------------------
+
+INSERT INTO unit (tradingName, companyName, phone, street, streetNumber, district, zipCode, email, idCity, idUnitType, createdBy, idCompany) 
+  VALUES ('icDev', 'icDev', '11111111111', 'icDev Street', 777, 'icDev District', '11111111', 'icdevhead@icdev.com', 4960, 1, 1, 1);
+
+-- -----------------------------------------------------
+-- Table unitTaxId
+-- -----------------------------------------------------
+
+INSERT INTO unitTaxId (taxId, idUnit, idCountry) VALUES ('11111111111', 1, 1);

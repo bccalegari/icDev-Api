@@ -11,7 +11,13 @@ module.exports = (sequelize, DataTypes) => {
 	 */
 	class UnitType extends Model {
 
-		//TODO implement unit type association with unit
+		static associate(models) {
+			
+			UnitType.hasMany(models.unit, {
+				foreignKey: 'idUnitType'
+			});
+
+		}
 
 	}
 
