@@ -9,6 +9,7 @@ const Database = require('../../../src/models/index');
 const Company = require('../../../src/models/index').company;
 const ApiKey = require('../../../src/models/index').apiKey;
 const User = require('../../../src/models/index').user;
+const City = require('../../../src/models/index').city;
 const DataBuilder = require('../../utils/DataBuilder');
 
 describe('Auth routes', () => {
@@ -219,20 +220,23 @@ describe('Auth routes', () => {
 		test('signUp_ValidCompanyIdAndValidUserData_ReturningUserCreated', async () => {
 	
 			const company = await Company.findByPk(1);
+
+			const city = await City.findByPk(1);
 	
 			const userToBeCreated = {
 				name: DataBuilder.randomString(50),
 				lastName: DataBuilder.randomString(50),
 				login: DataBuilder.randomString(20),
 				password: DataBuilder.randomString(12),
-				cpf: DataBuilder.randomString(11),
+				taxId: DataBuilder.randomString(11),
 				street: DataBuilder.randomString(150),
 				streetNumber: DataBuilder.randomInteger(),
 				district: DataBuilder.randomString(150),
+				zipCode: DataBuilder.randomString(8),
 				birthDate: DataBuilder.randomDate(),
 				phone: DataBuilder.randomString(14),
 				email: DataBuilder.randomEmail(),
-				city: 'Test City',
+				city: city.name,
 			};
 	
 			const response = await chai.request(app)
@@ -252,10 +256,11 @@ describe('Auth routes', () => {
 				name: userToBeCreated.name,
 				lastName: userToBeCreated.lastName,
 				login: userToBeCreated.login,
-				cpf: userToBeCreated.cpf,
+				taxId: userToBeCreated.taxId,
 				street: userToBeCreated.street,
 				streetNumber: userToBeCreated.streetNumber,
 				district: userToBeCreated.district,
+				zipCode: userToBeCreated.zipCode,
 				city: userToBeCreated.city,
 				birthDate: userToBeCreated.birthDate.toISOString().substring(0, 10),
 				phone: userToBeCreated.phone,

@@ -669,22 +669,22 @@ LOAD DATA INFILE '../mysql-files/data/cities.csv' INTO TABLE city
 -- Table apiKey
 -- -----------------------------------------------------
 
-INSERT INTO apiKey (`key`) VALUES ('f5bc9cb12c0525c7');
+INSERT INTO apiKey (`key`) VALUES ('1111111111111111');
 
 -- -----------------------------------------------------
 -- Table company
 -- -----------------------------------------------------
 
-INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', 'db19f9700a92fbce', 1);
+INSERT INTO company (`name`, code, idApiKey) VALUES ('icDev', '1111111111111111', 1);
 
 -- -----------------------------------------------------
 -- Table user
 -- -----------------------------------------------------
 
--- Password = icdev!root
+-- Password = 123
 
 INSERT INTO user (`name`, lastName, `login`, `password`, street, streetNumber, district, zipCode, birthDate, phone, email, idCity, createdBy, idCompany) 
-  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$jFe9tqos3Wa8/SBnGkaWGeFzb/3b/x0HgIYMbVPOIVo5zJS22slme', 'icDev Street', 777, 'icDev District', '11111','1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
+  VALUES ('icDev', 'Root', 'icdev.root', '$2a$10$LMrG2zc49pr0pLa7AOm5SeJgSxphKIaO/oxvXAK5mrwKPvjFWppiy', 'icDev Street', 777, 'icDev District', '11111','1995-12-04', '11111111111', 'icdevroot@icdev.com', 4960, 1, 1);
 
 -- -----------------------------------------------------
 -- Table userTaxId

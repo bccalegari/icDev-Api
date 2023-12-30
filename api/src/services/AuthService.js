@@ -275,7 +275,7 @@ class AuthService {
 
 			const newUserCountry = await newUserCity.getState().then(state => state.getCountry());
 
-			if (this.#userTaxIdRepository.findUserTaxIdByTaxIdAndIdCountry(user.taxId, newUserCountry.idCountry)) {
+			if (await this.#userTaxIdRepository.findUserTaxIdByTaxIdAndIdCountry(user.taxId, newUserCountry.idCountry)) {
 				throw ApiError.badRequest('Tax id already exists');
 			}
 

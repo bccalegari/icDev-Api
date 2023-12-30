@@ -12,12 +12,11 @@ module.exports = (sequelize, DataTypes) => {
 	class UnitTaxId extends Model {
 
 		static associate(models) {
-
-			/* TODO - Implement unit model
+			
 			UnitTaxId.belongsTo(models.unit, {
 				foreignKey: 'idUnit'
 			});
-			*/
+			
 
 			UnitTaxId.belongsTo(models.country, {
 				foreignKey: 'idCountry'

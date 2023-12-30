@@ -111,11 +111,11 @@ describe('Unit Model Unit Tests', () => {
 			updatedBy: 1
 		});
 
+		expect(unitAfterUpdate.tradingName).toBe(newTradingName);
+
 		await unitAfterUpdate.destroy({
 			force: true
 		});
-
-		expect(unitAfterUpdate.name).toBe(newTradingName);
 
 	});
 
@@ -144,8 +144,6 @@ describe('Unit Model Unit Tests', () => {
 		expect(unitAfterDelete).toBe(null);
 
 	});
-
-	//sss
 
 	test('isUnitValidationsMaxSize_BeingOverMaxSize_ThrowingException', async () => {
 
@@ -242,13 +240,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeCreateHook_BeingUsed_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -335,13 +333,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeUpdateHook_BeingUsed_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -370,13 +368,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeUpdateHookUpdatedByValidationNotNull_BeingNull_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -397,13 +395,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeUpdateHookUpdatedByValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -426,13 +424,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeUpdateHookUpdatedAtValidationIsNull_BeingNotNull_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -456,13 +454,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeDeleteHook_BeingUsed_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -489,13 +487,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeDeleteHookDeletedByValidationNotNull_BeingNull_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -516,13 +514,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeDeleteHookDeletedByValidationIsInteger_BeingNotInteger_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -545,13 +543,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitBeforeDeleteHookDeletedAtValidationIsNull_BeingNotNull_ThrowingException', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -575,13 +573,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdCityForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -609,13 +607,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdCityForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -643,13 +641,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdUnitTypeForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -675,13 +673,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdUnitTypeForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -707,13 +705,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitCreatedByForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -758,13 +756,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitCreatedByForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -809,13 +807,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitUpdatedByForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -864,13 +862,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitUpdatedByForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -919,13 +917,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitDeletedByForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -972,13 +970,13 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitDeletedByForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
 			idCity: 1
@@ -1025,16 +1023,17 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdCompanyForeignKey_PerformingLazyAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
-			idCity: 1
+			idCity: 1,
+			idCompany: 1
 		}, {
 			createdBy: 1
 		});
@@ -1059,16 +1058,17 @@ describe('Unit Model Unit Tests', () => {
 	test('isUnitIdCompanyForeignKey_PerformingEagerAssociation_True', async () => {
 
 		const unit = await Unit.create({
-			tradingName: DataBuilder.randomString(51),
-			companyName: DataBuilder.randomString(51),
-			phone: DataBuilder.randomString(16),
-			street: DataBuilder.randomString(151),
+			tradingName: DataBuilder.randomString(50),
+			companyName: DataBuilder.randomString(50),
+			phone: DataBuilder.randomString(15),
+			street: DataBuilder.randomString(150),
 			streetNumber: DataBuilder.randomInteger(),
-			district: DataBuilder.randomString(151),
-			zipCode: DataBuilder.randomString(17),
+			district: DataBuilder.randomString(150),
+			zipCode: DataBuilder.randomString(16),
 			email: DataBuilder.randomEmail(),
 			idUnitType: 1,
-			idCity: 1
+			idCity: 1,
+			idCompany: 1
 		}, {
 			createdBy: 1
 		});

@@ -8,6 +8,7 @@ const app = require('../../../src/app');
 const DataBuilder = require('../../utils/DataBuilder');
 const Company = require('../../../src/models/index').company;
 const User = require('../../../src/models/index').user;
+const City = require('../../../src/models/index').city;
 
 describe('Info routes', () => {
 
@@ -147,10 +148,10 @@ describe('Info routes', () => {
 
 		test('listAllCities_SearchByName_ReturningAllCitiesWithSimilarNamesPaginated', async () => {
 
-			const cityName = 'Test City 2';
+			const city = await City.findByPk(1);
 	
 			const response = await chai.request(app)
-				.get(`/v1/info/cities?city=${cityName}`)
+				.get(`/v1/info/cities?city=${city.name}`)
 				.set('company-id', company.idCompany) 
 				.set('Authorization', `accessToken ${accessToken}`);
 	
@@ -161,7 +162,7 @@ describe('Info routes', () => {
 			expect(response.statusCode).toBe(200);
 	
 			expect(response.body[0]).toEqual(expect.objectContaining({
-				city: expect.stringMatching(/(\w*\s\w*\s2\d?)/),
+				city: expect.stringMatching(city.name),
 				state: expect.objectContaining({
 					name: expect.any(String),
 					isoAlpha2: expect.any(String),

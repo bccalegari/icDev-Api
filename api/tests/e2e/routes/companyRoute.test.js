@@ -143,6 +143,7 @@ describe('Company routes', () => {
 					street: DataBuilder.randomString(150),
 					streetNumber: DataBuilder.randomInteger(),
 					district: DataBuilder.randomString(150),
+					zipCode: DataBuilder.randomString(15),
 					birthDate: DataBuilder.randomDate(),
 					phone: DataBuilder.randomString(14),
 					email: DataBuilder.randomEmail(),

@@ -44,10 +44,6 @@ module.exports = (sequelize, DataTypes) => {
 			User.hasOne(models.userTaxId, {
 				foreignKey: 'idUser'
 			});
-
-			User.hasMany(models.unit, {
-				foreignKey: 'idUser'
-			});
 				
 		}
 		
